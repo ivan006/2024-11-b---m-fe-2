@@ -78,7 +78,6 @@ dayjs.extend(timezone);
 
 import RelationComponent from "./RelationComponent.vue";
 import DateAndTimeRangePicker from "./DateAndTimeRangePicker.vue";
-import SearchGooglePlace from "./SearchGooglePlace.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
 import SuperSelect from "./SuperSelect.vue";
 import { defineAsyncComponent } from "vue";
@@ -87,7 +86,7 @@ import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
 import RecordFieldsForDisplayCustom from "./RecordFieldsForDisplayCustom.vue";
 import RecordFieldsForEditCustom from "./RecordFieldsForEditCustom.vue";
 import CreateButton from "./CreateButton.vue";
-import { FieldUsageTypes } from "../index";
+import { FieldUsageTypes } from "./FieldUsageTypes";
 
 const AsyncSuperTableComponent = defineAsyncComponent(
     () => import("./SuperTable.vue"),
@@ -102,7 +101,6 @@ export default {
     RecordFieldsForDisplayGeneric,
     RecordFieldsForEditGeneric,
     SuperSelect,
-    SearchGooglePlace,
     DateAndTimeRangePicker,
     RelationComponent,
     SuperTable: AsyncSuperTableComponent,

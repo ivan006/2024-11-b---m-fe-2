@@ -258,18 +258,7 @@
       />
     </template>
     <template v-else-if="field.usageType === 'location_address_place_name'">
-      <SearchGooglePlace
-          :hideLabel="hideLabel"
-          :configs="field"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          @placeSelected="
-          (e) => {
-            $emit('placeSelected', e);
-          }
-        "
-      />
-      <!--@change="searchGooglePlace"-->
+    <!---->
     </template>
     <template v-else-if="field.usageType.startsWith('mapExtra')">
       <q-input
@@ -359,7 +348,6 @@
 import RelationComponent from "./RelationComponent.vue";
 import DateAndTimeRangePicker from "./DateAndTimeRangePicker.vue";
 import DateAndTimePicker from "./DateAndTimePicker.vue";
-import SearchGooglePlace from "./SearchGooglePlace.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
 import SuperSelect from "./SuperSelect.vue";
 // import SuperTable from "./SuperTable.vue";
@@ -373,7 +361,6 @@ export default {
   name: "DatapointForEditInner",
   components: {
     SuperSelect,
-    SearchGooglePlace,
     DateAndTimePicker,
     DateAndTimeRangePicker,
     RelationComponent,

@@ -14,7 +14,7 @@ import {
     Uid,
     HasOne,
 } from '@vuex-orm/core'
-import Helpers from '../utils/Helpers'
+import Helpers from './Helpers'
 
 
 
