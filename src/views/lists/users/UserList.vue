@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { SuperTable } from 'wizweb-fe'
+// import { SuperTable } from 'wizweb-fe'
 import User from 'src/models/User'
 
 export default {

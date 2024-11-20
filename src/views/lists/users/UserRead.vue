@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { SuperRecord } from 'wizweb-fe'
+// import { SuperRecord } from 'wizweb-fe'
 import User from 'src/models/User'
 
 export default {

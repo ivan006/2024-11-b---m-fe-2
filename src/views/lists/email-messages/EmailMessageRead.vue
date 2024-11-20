@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { SuperRecord } from 'wizweb-fe'
+// import { SuperRecord } from 'wizweb-fe'
 import EmailMessage from 'src/models/orm-api/EmailMessage'
 
 export default {

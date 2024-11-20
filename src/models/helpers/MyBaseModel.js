@@ -1,4 +1,4 @@
-import { DBBaseModel } from 'wizweb-fe'
+// import { DBBaseModel } from 'wizweb-fe'
 import VueCookies from "vue-cookies";
 
 export default class DBEvent extends DBBaseModel {
