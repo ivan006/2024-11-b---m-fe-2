@@ -18,7 +18,7 @@
 </template>
 
 <script>
-// import { SuperTable } from 'wizweb-fe'
+import SuperTable from "@/components/SuperTable.vue";
 import EmailMessage from '@/models/orm-api/EmailMessage'
 export default {
   name: "EventButtonAttend",

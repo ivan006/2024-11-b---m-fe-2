@@ -16,7 +16,7 @@
 </template>
 
 <script>
-// import { SuperTable } from 'wizweb-fe'
+import SuperTable from "@/components/SuperTable.vue";
 import User from '@/models/User'
 
 export default {

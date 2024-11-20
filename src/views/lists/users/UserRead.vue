@@ -9,8 +9,9 @@
 </template>
 
 <script>
-// import { SuperRecord } from 'wizweb-fe'
+import SuperRecord from "@/components/SuperRecord.vue";
 import User from '@/models/User'
+
 
 export default {
     name: 'User-read',

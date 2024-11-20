@@ -9,7 +9,7 @@
 </template>
 
 <script>
-// import { SuperRecord } from 'wizweb-fe'
+import SuperRecord from "@/components/SuperRecord.vue";
 import EmailMessage from '@/models/orm-api/EmailMessage'
 
 export default {
