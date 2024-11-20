@@ -1,89 +1,76 @@
 <template>
   <div>
-    <!--<pre>{{superOptions}}</pre>-->
     <template v-if="superOptions.canEdit">
-      <q-dialog
-          v-model="createItemData.showModal"
-          @update:modelValue="formServerErrors = {};"
-      >
-        <!--:parentKeyValuePair="parentKeyValuePair"-->
-        <CreateEditForm
-            :titlePrefix="`New`"
-            v-if="createItemData.showModal"
-            v-model="createItemData.data"
-            @submit="createItemSubmit"
-            @cancel="createItemData.showModal = false; formServerErrors = {};"
-            :superOptions="superOptions"
-            style="width: 700px; max-width: calc(-32px + 100vw);"
-            :template="templateForm"
-            :formServerErrors="formServerErrors"
-            :submitting="submitting"
-        />
-      </q-dialog>
-
-      <template v-if="superOptions.canEdit">
-        <q-dialog
-            v-model="editItemData.showModal"
-            @update:modelValue="formServerErrors = {};"
-        >
+      <!-- Create Modal -->
+      <div v-if="createItemData.showModal" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full">
           <CreateEditForm
-              titlePrefix="Edit"
-              v-if="editItemData.showModal"
-              v-model="editItemData.data"
-              @submit="editItemSubmit"
-              @cancel="editItemData.showModal = false; formServerErrors = {};"
+              :titlePrefix="'New'"
+              v-model="createItemData.data"
+              @submit="createItemSubmit"
               :superOptions="superOptions"
               :template="templateForm"
-              style="width: 700px; max-width: calc(-32px + 100vw);"
               :formServerErrors="formServerErrors"
               :submitting="submitting"
           />
-        </q-dialog>
+        </div>
+      </div>
 
-        <q-dialog v-model="deleteItemData.showModal" >
-          <q-card style="width: 500px; max-width: calc(-32px + 100vw);">
-            <q-card-section class="q-pt-md q-pb-md q-pl-md q-pr-md">
-              <div class="text-h6">Delete Item</div>
-            </q-card-section>
-            <q-card-section>
-              <p>Are you sure you want to delete this item?</p>
-            </q-card-section>
-            <q-card-actions align="right">
-              <q-btn @click="deleteItemData.showModal = false" flat>Cancel</q-btn>
-              <q-btn @click="deleteItemSubmit" color="negative" flat>Delete</q-btn>
-            </q-card-actions>
-          </q-card>
-        </q-dialog>
-      </template>
+      <!-- Edit Modal -->
+      <div v-if="editItemData.showModal" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full">
+          <CreateEditForm
+              titlePrefix="Edit"
+              v-model="editItemData.data"
+              @submit="editItemSubmit"
+              :superOptions="superOptions"
+              :template="templateForm"
+              :formServerErrors="formServerErrors"
+              :submitting="submitting"
+          />
+        </div>
+      </div>
+
+      <!-- Delete Modal -->
+      <div v-if="deleteItemData.showModal" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-4">Delete Item</h2>
+            <p>Are you sure you want to delete this item?</p>
+            <div class="mt-4 flex justify-end">
+              <button @click="deleteItemData.showModal = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">Cancel</button>
+              <button @click="deleteItemSubmit" class="px-4 py-2 bg-red-500 text-white rounded-md ml-2">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
 
 <script>
-// import CreateEditForm from "./CreateEditForm.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
-import {defineAsyncComponent} from "vue";
+import { defineAsyncComponent } from "vue";
 
 const AsyncCreateEditFormComponent = defineAsyncComponent(() =>
-    import('./CreateEditForm.vue')
+    import("./CreateEditForm.vue")
 );
 
 export default {
   name: "CrudModal",
   components: {
     CreateEditForm: AsyncCreateEditFormComponent,
-    // CreateEditForm,
   },
   props: {
     canEdit: {
       type: Boolean,
-      default: false, // No need to change, Vue understands this type correctly
+      default: false,
     },
-    superOptions: {},
-    parentKeyValuePair: {},
-    templateForm: {},
+    superOptions: Object,
+    parentKeyValuePair: Object,
+    templateForm: Object,
   },
-  data(){
+  data() {
     return {
       submitting: false,
       formServerErrors: {},
@@ -99,95 +86,69 @@ export default {
         showModal: false,
         data: {},
       },
-    }
+    };
   },
   methods: {
-
     createNewInstance() {
-      // return new this.model();
       return new this.superOptions.model();
     },
     createItem() {
       this.createItemData.showModal = true;
     },
     createItemSubmit() {
-      if (this.submitting){
-        return
-      }
-      this.submitting = true
+      if (this.submitting) return;
+      this.submitting = true;
       let payload = QuickListsHelpers.preparePayload(
           this.createItemData.data,
-          this.superOptions.modelFields,
+          this.superOptions.modelFields
       );
 
       delete payload.id;
 
-      // const inititalItemLength = this.items.length;
-
-
-      let headers = {}
-      const hasFileField = this.superOptions.modelFields.find((field) => field.usageType == "fileImageType");
-      if (hasFileField){
+      let headers = {};
+      const hasFileField = this.superOptions.modelFields.find(
+          (field) => field.usageType === "fileImageType"
+      );
+      if (hasFileField) {
         headers = {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        };
       }
 
-      this.superOptions.model.Store(
-          {
-            ...payload,
-            ...this.createPayloadExtras,
-          },
-          [],
-          {},
-          headers
-      )
+      this.superOptions.model
+          .Store(
+              { ...payload, ...this.createPayloadExtras },
+              [],
+              {},
+              headers
+          )
           .then((response) => {
-
-            // hook to go here
-            if (this.superOptions.model.hooks?.createComplete){
-              this.superOptions.model.hooks.createComplete(response)
+            if (this.superOptions.model.hooks?.createComplete) {
+              this.superOptions.model.hooks.createComplete(response);
             }
-            this.submitting = false
-
-            // if (!inititalItemLength) {
-            //   if (!this.submitting) {
-            //   }
-            // }
-
-
-
-            // this.fetchData();
-            this.$emit('fetchData');
-            this.$emit('createdItem', response.response.data.data);
-
-            // After handling, reset formData (if needed)
+            this.submitting = false;
+            this.$emit("fetchData");
+            this.$emit("createdItem", response.response.data.data);
             this.createItemData.data = {};
-
-            // Close the dialog after submission
             this.createItemData.showModal = false;
             this.formServerErrors = {};
           })
           .catch((err) => {
-            this.submitting = false
+            this.submitting = false;
             this.formServerErrors = err.response.data;
           });
-
     },
-
     deleteItem(item) {
-
       this.$emit("deleteItem", item);
-
       this.deleteItemData.data = item;
       this.deleteItemData.showModal = true;
     },
     deleteItemSubmit() {
-      this.superOptions.model.Delete(this.deleteItemData.data.id)
+      this.superOptions.model
+          .Delete(this.deleteItemData.data.id)
           .then(() => {
-            this.$emit('fetchData');
+            this.$emit("fetchData");
             this.deleteItemData.showModal = false;
-
             this.$emit("deleteComplete");
           })
           .catch((err) => {
@@ -196,8 +157,7 @@ export default {
     },
     editItem(item) {
       this.$emit("editItem", item);
-
-      this.editItemData.data = {...item};
+      this.editItemData.data = { ...item };
       this.editItemData.showModal = true;
     },
     editItemSubmit() {
@@ -206,17 +166,10 @@ export default {
           this.superOptions.modelFields
       );
 
-      this.superOptions.model.Update(
-          payload,
-          [],
-          {},
-          {
-            'Content-Type': 'multipart/form-data'
-          }
-      )
+      this.superOptions.model
+          .Update(payload, [], {}, { "Content-Type": "multipart/form-data" })
           .then(() => {
-            // this.fetchData();
-            this.$emit('fetchData');
+            this.$emit("fetchData");
             this.editItemData.showModal = false;
             this.formServerErrors = {};
             this.$emit("editComplete");
@@ -228,20 +181,22 @@ export default {
     },
   },
   watch: {
-
     "createItemData.showModal"(arg) {
       if (arg) {
         this.createItemData.data = this.createNewInstance();
-
-        if (this.parentKeyValuePair.parentFKey && this.parentKeyValuePair.parentFVal) {
-          this.createItemData.data[this.parentKeyValuePair.parentFKey] = this.parentKeyValuePair.parentFVal;
+        if (
+            this.parentKeyValuePair.parentFKey &&
+            this.parentKeyValuePair.parentFVal
+        ) {
+          this.createItemData.data[this.parentKeyValuePair.parentFKey] =
+              this.parentKeyValuePair.parentFVal;
         }
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
+/* Scoped styles for modals, buttons, etc., can go here */
 </style>

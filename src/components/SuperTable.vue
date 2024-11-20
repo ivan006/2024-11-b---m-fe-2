@@ -146,74 +146,7 @@
               />
             </div>
           </template>
-          <template v-if="activeTab == 'map'">
-            <SuperTableMap
-                :mapHeaders="mapHeaders"
-                :items="items"
-                @clickRow="clickRow"
-                :superOptions="superOptions"
-                @editItem="editItem"
-                @deleteItem="deleteItem"
-                :unClickable="unClickable"
-                :templateListGrid="templateListGrid"
-            />
-          </template>
-          <template v-if="activeTab == 'calendar'">
-            <template v-if="!noBorder">
-              <q-card class="q-pa-sm">
-                <!--<SuperTableCalendarWrapper-->
-                <!--    :startFieldName="startFieldName"-->
-                <!--    :endFieldName="endFieldName"-->
-                <!--    :items="items"-->
-                <!--    @clickRow="clickRow"-->
-                <!--    :superOptions="superOptions"-->
-                <!--    @editItem="editItem"-->
-                <!--    @deleteItem="deleteItem"-->
-                <!--    :templateListGrid="templateListGrid"-->
-                <!--    :templateListCalendar="templateListCalendar"-->
-                <!--    :unClickable="unClickable"-->
-                <!--    :loading="loading"-->
-                <!--/>-->
-                <!--&lt;!&ndash;:calendarMode="calendarMode"&ndash;&gt;-->
 
-                <SuperCalendar
-                    @clickRow="clickRow"
-                    @editItem="editItem"
-                    @deleteItem="deleteItem"
-                    :loading="loading"
-                    :mixedConfigs="[
-                    {
-                      templateListCalendar: templateListCalendar,
-                      startFieldName: startFieldName,
-                      endFieldName: endFieldName,
-                      items: items,
-                      superOptions: superOptions,
-                      unClickable: unClickable,
-                    },
-                  ]"
-                />
-                <!--:calendarMode="calendarMode"-->
-              </q-card>
-            </template>
-            <template v-else>
-              <SuperCalendar
-                  @clickRow="clickRow"
-                  @editItem="editItem"
-                  @deleteItem="deleteItem"
-                  :loading="loading"
-                  :mixedConfigs="[
-                  {
-                    templateListCalendar: templateListCalendar,
-                    startFieldName: startFieldName,
-                    endFieldName: endFieldName,
-                    items: items,
-                    superOptions: superOptions,
-                    unClickable: unClickable,
-                  },
-                ]"
-              />
-            </template>
-          </template>
         </div>
       </template>
     </template>
@@ -248,23 +181,16 @@
 import QuickListsHelpers from "./QuickListsHelpers";
 import SuperTableGrid from "./SuperTableGrid.vue";
 import SuperTableTable from "./SuperTableTable.vue";
-import SuperTableMap from "./SuperTableMap.vue";
-import SuperTableList from "./SuperTableList.vue";
 import SuperSelect from "./SuperSelect.vue";
-import FilterTime from "./FilterTime.vue";
-import FilterPlace from "./FilterPlace.vue";
+
 import DestructableExpansionPanels from "./DestructableExpansionPanels.vue";
 import CreateButton from "./CreateButton.vue";
 import RelationComponent from "./RelationComponent.vue";
 
-import {defineAsyncComponent} from "vue";
+import { defineAsyncComponent } from "vue";
 import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
-import SearchGooglePlace from "./SearchGooglePlace.vue";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import PdfTemplate from "./PdfTemplate.vue";
-import {Helpers} from "../index";
-import SuperCalendar from "./SuperCalendar.vue";
+
+import Helpers from "./Helpers";
 import CrudModal from "./CrudModal.vue";
 import SuperTableTopBar from "./SuperTableTopBar.vue";
 // import html2pdf from 'html2pdf.js';
@@ -281,18 +207,11 @@ export default {
   components: {
     SuperTableTopBar,
     CrudModal,
-    SuperCalendar,
-    PdfTemplate,
-    SearchGooglePlace,
     RecordFieldsForDisplayGeneric,
     RelationComponent,
     CreateButton,
     DestructableExpansionPanels,
-    FilterPlace,
-    FilterTime,
     SuperSelect,
-    SuperTableList,
-    SuperTableMap,
     SuperTableTable,
     SuperTableGrid,
     CreateEditForm: AsyncComponentCreateEditForm,
@@ -301,7 +220,7 @@ export default {
   props: {
     downloadables: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
     noBorder: {
       type: Boolean,
@@ -483,7 +402,7 @@ export default {
       loadingError: false,
       search: "",
       years: Array.from(
-          {length: 5},
+          { length: 5 },
           (_, index) => new Date().getFullYear() - index,
       ), // last 5 years including this year
       itemsLength: 1,
@@ -877,8 +796,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-//.highlighted {
-//  background-color: #f0f0f0;
-//}
-</style>
+

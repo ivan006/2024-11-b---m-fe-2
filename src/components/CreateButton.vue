@@ -1,17 +1,13 @@
 <template>
   <div>
-    <q-btn
+    <button
         @click="emitCreateItem"
-        :disable="!canEdit"
-        outline
+        :disabled="!canEdit"
+        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
     >
-      <!--:disable="!canCreatePart2"-->
       {{ createButtonText ? createButtonText : 'New' }}
-      <q-tooltip v-if="canCreateMsg.length" bottom :disable="canCreatePart2">
-        <span>{{ canCreateMsg }}</span>
-      </q-tooltip>
-    </q-btn>
 
+    </button>
   </div>
 </template>
 
@@ -44,47 +40,24 @@ export default {
   computed: {
     canCreate() {
       let result = false;
-      // if (this.superOptions.currentParentRel?.field?.fieldExtras?.relationRules?.creatable) {
-      //   result = this.superOptions.currentParentRel.field.fieldExtras.relationRules.creatable(
-      //       this.superOptions.user,
-      //       this.superOptions.currentParentRel.currentParentRecord.item,
-      //   );
-      // }
+      // Add logic here if necessary, e.g., checking permissions
       return result;
     },
     canCreateMsgType() {
       let result = "";
-      // if (this.superOptions.currentParentRel?.currentParentRecord) {
-      //   if (this.superOptions.currentParentRel?.currentParentRecord.model.name === "DBProviderGroup") {
-      //     result = "provider";
-      //   } else if (this.superOptions.currentParentRel?.currentParentRecord.model.name === "DBCustomerGroup") {
-      //     result = "customer";
-      //   }
-      // }
+      // Modify to match the logic for different message types
       return result;
     },
     canCreatePart2() {
       let result = this.canCreate;
-      // if (
-      //     this.superOptions.currentParentRel?.currentParentRecord &&
-      //     this.superOptions.currentParentRel.currentParentRecord.relationType === "relChildrenChildrenApplicationType"
-      // ) {
-      //   result = this.canCreate || !!this.customerGroupsAssociatedWithUser.length;
-      // }
+      // Add logic here if necessary
       return result;
     },
     canEdit() {
-      const result = this.model.rules.creatable()
-      return result;
+      return this.model.rules.creatable();
     },
     canCreateMsg() {
       let result = this.getMsg(this.canCreateMsgType);
-      // if (
-      //     this.superOptions.currentParentRel?.currentParentRecord &&
-      //     this.superOptions.currentParentRel.currentParentRecord.relationType === "relChildrenChildrenApplicationType"
-      // ) {
-      //   result = this.getMsg("customer");
-      // }
       return result;
     },
   },
@@ -94,13 +67,7 @@ export default {
     },
     getMsg(type) {
       let result = "";
-      // if (Array.isArray(type)) {
-      //   if (type.length > 1) {
-      //     result = `To create first set your active ${type[0]} group and active ${type[1]} group`;
-      //   }
-      // } else {
-      //   result = `To create first set your active ${type} group`;
-      // }
+      // Implement logic for different message types
       return result;
     },
   },
@@ -110,4 +77,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Add any custom styles here if necessary */
+</style>

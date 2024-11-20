@@ -1,91 +1,113 @@
 <template>
-  <q-page class="q-pa-md ">
-
-    <div class="row  q-col-gutter-md">
-      <div class="col-xl-3 col-md-3 col-sm-12 col-xs-12">
-      </div>
-      <div class="col-xl-6 col-md-6 col-sm-12 col-xs-12">
-        <q-card class="q-pa-md">
+  <div class="container mx-auto px-4 py-6">
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 md:col-span-3"></div>
+      <div class="col-span-12 md:col-span-6">
+        <div class="bg-white p-6 shadow-md rounded-lg">
           <template v-if="!checkEmail">
-            <q-form ref="form" @submit="join" >
-              <div class="text-h6 q-mb-md">Register</div>
-              <q-input
-                v-model="entity.name"
-                label="Full Name"
-                :error="!!errors.name"
-                :error-message="errors.name"
-                outlined
-                dense
-                class="q-mb-sm"
-              />
-              <q-input
-                type="email"
-                v-model="entity.email"
-                label="Email"
-                :error="!!errors.email"
-                :error-message="errors.email"
-                :rules="[val => !!val || 'Field is required']"
-                outlined
-                dense
-                class="q-mb-sm"
-              />
-              <q-input
-                v-model="entity.password"
-                :type="showPassword ? 'text' : 'password'"
-                :append="showPassword ? 'visibility_off' : 'visibility'"
-                @click:append="showPassword = !showPassword"
-                label="Password"
-                :error="!!errors.password"
-                :error-message="errors.password"
-                :rules="[val => !!val || 'Field is required']"
-                outlined
-                dense
-                class="q-mb-sm"
-              />
-              <q-input
-                v-model="entity.c_password"
-                :type="showCPassword ? 'text' : 'password'"
-                :append="showCPassword ? 'visibility_off' : 'visibility'"
-                @click:append="showCPassword = !showCPassword"
-                label="Confirm Password"
-                :error="!!errors.c_password"
-                :error-message="errors.c_password"
-                :rules="[val => !!val || 'Field is required']"
-                outlined
-                dense
-                class="q-mb-sm"
-              />
+            <form @submit.prevent="join">
+              <h2 class="text-2xl font-semibold mb-4">Register</h2>
 
-
-
-              <q-btn
-                block
-                class="full-width "
-                :loading="loading"
-                type="submit"
-                label="Register"
-                color="primary"
-              />
-              <div class="q-mt-md text-center">
-                <q-btn
-                  label="Login"
-                  class="full-width"
-                  outline
-                  color="primary"
-                  @click="$router.push({ path: 'login'})"
+              <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input
+                    v-model="entity.name"
+                    type="text"
+                    id="name"
+                    class="form-input w-full mt-1 p-2 border rounded-md"
+                    :class="{'border-red-500': !!errors.name}"
+                    :placeholder="'Full Name'"
                 />
+                <p v-if="errors.name" class="text-sm text-red-500">{{ errors.name }}</p>
               </div>
-            </q-form>
+
+              <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                    v-model="entity.email"
+                    type="email"
+                    id="email"
+                    class="form-input w-full mt-1 p-2 border rounded-md"
+                    :class="{'border-red-500': !!errors.email}"
+                    :placeholder="'Email'"
+                />
+                <p v-if="errors.email" class="text-sm text-red-500">{{ errors.email }}</p>
+              </div>
+
+              <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="relative">
+                  <input
+                      v-model="entity.password"
+                      :type="showPassword ? 'text' : 'password'"
+                      id="password"
+                      class="form-input w-full mt-1 p-2 border rounded-md"
+                      :class="{'border-red-500': !!errors.password}"
+                      placeholder="Password"
+                  />
+                  <button
+                      type="button"
+                      @click="showPassword = !showPassword"
+                      class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                  >
+                    <span v-if="showPassword">Hide</span>
+                    <span v-else>Show</span>
+                  </button>
+                </div>
+                <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
+              </div>
+
+              <div class="mb-4">
+                <label for="c_password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <div class="relative">
+                  <input
+                      v-model="entity.c_password"
+                      :type="showCPassword ? 'text' : 'password'"
+                      id="c_password"
+                      class="form-input w-full mt-1 p-2 border rounded-md"
+                      :class="{'border-red-500': !!errors.c_password}"
+                      placeholder="Confirm Password"
+                  />
+                  <button
+                      type="button"
+                      @click="showCPassword = !showCPassword"
+                      class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                  >
+                    <span v-if="showCPassword">Hide</span>
+                    <span v-else>Show</span>
+                  </button>
+                </div>
+                <p v-if="errors.c_password" class="text-sm text-red-500">{{ errors.c_password }}</p>
+              </div>
+
+              <button
+                  type="submit"
+                  :disabled="loading"
+                  class="w-full py-2 px-4 mt-4 bg-blue-500 text-white rounded-lg"
+              >
+                <span v-if="loading">Registering...</span>
+                <span v-else>Register</span>
+              </button>
+
+              <div class="mt-4 text-center">
+                <button
+                    @click="$router.push({ path: 'login' })"
+                    class="w-full py-2 px-4 mt-4 border border-blue-500 text-blue-500 rounded-lg"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
           </template>
+
           <template v-else>
-            Your account has been registered!
-            <br>
-            We have sent you an email with instructions to verify your email address.
+            <p>Your account has been registered!</p>
+            <p>We have sent you an email with instructions to verify your email address.</p>
           </template>
-        </q-card>
+        </div>
       </div>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script>
@@ -121,32 +143,23 @@ export default {
       }
     },
     join() {
-      if (this.$refs.form.validate()) {
-        this.loading = true;
 
+      this.loading = true;
 
+      const session = VueCookies.get('VITE_AUTH');
 
-        const session = VueCookies.get('VITE_AUTH');
-
-
-
-        User.Register(this.entity)
+      User.Register(this.entity)
           .then((response) => {
-
-            const user = response.response.data.user
-
-            this.checkEmail = true
-            this.loading = false
-
+            const user = response.response.data.user;
+            this.checkEmail = true;
+            this.loading = false;
           })
           .catch((errors) => {
             if (errors.response && errors.response.data.errors) {
               this.setErrors(errors.response.data.errors);
             }
-            this.loading = false
+            this.loading = false;
           });
-      }
-
     },
   },
   mounted() {
@@ -155,4 +168,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Tailwind CSS already includes utility classes, so no need for additional styles */
+</style>
