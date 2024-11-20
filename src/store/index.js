@@ -1,29 +1,28 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import VuexORM from '@vuex-orm/core';
-import axios from 'axios';
-import VuexORMAxios from '@vuex-orm/plugin-axios';
+import { createStore } from 'vuex'
+import VuexORM from '@vuex-orm/core'
 
-// Import your models here (e.g., User)
-// import User from '@/models/User'; // Adjust path as needed
+// import { DBCrudCacheSet } from 'wizweb-fe';
 
-Vue.use(Vuex);
+import User from 'src/models/User'
+import Session from 'src/models/Session'
+import RouteLineage  from "src/models/RouteLineage";
+import EmailMessage from "src/models/orm-api/EmailMessage";
 
-// Create a new database instance
-const database = new VuexORM.Database();
+// Initialize the database
+const database = new VuexORM.Database()
 
-// Register your models to the database
-// database.register(User);
+// Register models
+// database.register(DBCrudCacheSet);
 
-// Install the Axios plugin
-VuexORM.use(VuexORMAxios, {
-    database,
-    http: axios.create({
-        baseURL: 'https://your-api-base-url.com', // Replace with your API's base URL
-    }),
-});
+database.register(User)
+database.register(Session)
+database.register(RouteLineage)
+database.register(EmailMessage);
 
-// Create the Vuex store with Vuex ORM
-export default new Vuex.Store({
-    plugins: [VuexORM.install(database)],
-});
+
+// Create Vuex store
+const store = createStore({
+  plugins: [VuexORM.install(database)]
+})
+
+export default store
