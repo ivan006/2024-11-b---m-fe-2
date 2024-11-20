@@ -1,28 +1,33 @@
 <template>
-  <div id="app">
-    <nav class="bg-gray-800 text-white p-4">
-      <!-- Navigation Links -->
-      <router-link to="/" class="mx-2">Home</router-link>
-      <router-link to="/about" class="mx-2">About</router-link>
-    </nav>
-
-    <!-- Route-Specific Components Rendered Here -->
-    <router-view></router-view>
-  </div>
+  <router-view />
 </template>
 
-<script>
-export default {
-  name: 'App',
-};
-</script>
+<script setup>
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import VuexORM from '@vuex-orm/core';
+import VuexORMAxios from '@vuex-orm/plugin-axios';
+import axios from 'axios';
+import { generateRouteLineages } from 'src/store/modules/routeLineages';
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 20px;
-}
-</style>
+defineOptions({
+  name: 'App'
+});
+
+onMounted(() => {
+  const store = useStore();
+  const router = useRouter();
+
+  // Initialize Vuex ORM with Axios plugin
+  VuexORM.use(VuexORMAxios, {axios});
+
+
+  // Ensure router and routes are available
+  if (router && router.options && router.options.routes) {
+    generateRouteLineages(router.options.routes);
+  } else {
+    console.error('Router is not properly initialized or routes are not accessible.');
+  }
+});
+</script>
