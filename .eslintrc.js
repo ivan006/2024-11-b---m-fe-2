@@ -1,20 +1,22 @@
 module.exports = {
     root: true,
     env: {
+        browser: true,
         node: true,
     },
     extends: [
-        'plugin:vue/vue3-recommended', // Use Vue 3 recommendations
+        'plugin:vue/vue3-recommended', // Vue 3-specific rules
         'eslint:recommended',
     ],
-    parser: '@babel/eslint-parser', // Use Babel parser
+    parser: 'vue-eslint-parser', // Ensure the correct parser is set
     parserOptions: {
-        requireConfigFile: false, // Allows Babel parser to work without a separate Babel config file
-        ecmaVersion: 2020,       // Support modern JavaScript
+        parser: '@babel/eslint-parser', // Use Babel parser for `<script>` section
+        requireConfigFile: false,       // Prevent need for Babel config
+        ecmaVersion: 2020,              // Enable modern JavaScript syntax
         sourceType: 'module',
     },
     rules: {
+        'vue/no-multiple-template-root': 'off', // Allow multiple root nodes in Vue 3
         'no-unused-vars': 'warn',
-        'no-undef': 'off', // Disable undefined errors for `static` fields
     },
 };
