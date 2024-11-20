@@ -161,17 +161,15 @@ export default {
   props: {
     templateForm: {
       type: Object,
-      default() {
-        return {};
-      },
+      default: () => ({}), // Updated default to a function
     },
     createButtonText: {
       type: String,
-      default: "",
+      default: "", // This is fine as it is (string default doesn't require a function)
     },
     allowedFilters: {
       type: Array,
-      default: null,
+      default: () => [], // Updated to use a function returning an empty array
     },
     noBorder: {
       type: Boolean,
@@ -179,15 +177,15 @@ export default {
     },
     modelValue: {
       type: Object,
-      default: {},
+      default: () => ({}), // Updated to return an empty object from a function
     },
     downloadables: {
       type: Object,
-      default: {},
+      default: () => ({}), // Updated to return an empty object from a function
     },
     templateListTable: {
       type: Object,
-      default: {},
+      default: () => ({}), // Updated to return an empty object from a function
     },
     canCreateComputed: {
       type: Boolean,
@@ -219,31 +217,28 @@ export default {
     },
     longField: {
       type: Object,
-      default: {},
+      default: () => ({}), // Updated to return an empty object from a function
     },
     superOptions: {
       type: Object,
-      default() {
-        return {
-          headers: [],
-          modelFields: [],
-          displayMapField: false,
-          model: {},
-          canEdit: false,
-          currentParentRecord: {},
-        };
-      },
+      default: () => ({
+        headers: [],
+        modelFields: [],
+        displayMapField: false,
+        model: {},
+        canEdit: false,
+        currentParentRecord: {},
+      }), // Updated to return an object from a function
     },
     viewAs: {
       type: Object,
-      default() {
-        return {
-          show: ["table", "grid", "map", "calendar"],
-          default: "table",
-        };
-      },
+      default: () => ({
+        show: ["table", "grid", "map", "calendar"],
+        default: "table",
+      }), // Updated to return an object from a function
     },
   },
+
   data() {
     return {
       activeTabRef: "",

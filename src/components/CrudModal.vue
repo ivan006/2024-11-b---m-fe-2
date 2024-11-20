@@ -75,7 +75,10 @@ export default {
     // CreateEditForm,
   },
   props: {
-    canEdit: false,
+    canEdit: {
+      type: Boolean,
+      default: false, // No need to change, Vue understands this type correctly
+    },
     superOptions: {},
     parentKeyValuePair: {},
     templateForm: {},

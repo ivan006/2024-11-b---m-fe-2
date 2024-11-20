@@ -1,87 +1,65 @@
 <template>
   <div>
-    <!--<pre>{{console.log(flattenedHeadersHideMapField)}}</pre>-->
-    <q-table
-        v-if="items.length"
-        :table-row-class-fn="tableRowClassFn"
-        class="qTable"
-        :rows="items"
-        :columns="flattenedHeadersHideMapField"
-        row-key="id"
-        :rows-per-page-options="[10, 20, 30, 50, 100]"
-        :pagination.sync="pagination"
-        :loading="loading"
-        @request="onRequest"
-        :hideBottom="hidePagination"
-    >
-      <template v-slot:body="props">
-        <q-tr
-            :props="props"
-            @click="clickRow(props.row)"
-            :no-hover="!model.rules.readable(props.row)"
+    <div v-if="items.length">
+      <table class="table-auto w-full">
+        <thead>
+        <tr>
+          <th v-for="header in flattenedHeadersHideMapField" :key="header.field" class="px-4 py-2 text-left">
+            {{ header.label }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+            v-for="(row, index) in items"
+            :key="index"
+            :class="tableRowClassFn({ row })"
+            @click="clickRow(row)"
+            :style="{ cursor: model.rules.readable(row) ? 'pointer' : 'unset' }"
         >
-          <q-td
+          <td
               v-for="header in flattenedHeaders"
               :key="header.field"
-              :props="props"
+              class="px-4 py-2"
           >
-            <template v-if="header.isChildOf">
-              <div>
-                <DatapointForDisplay
-                    :item="props.row[header.isChildOf.value]"
-                    :superOptions="superOptions"
-                    :childRelations="[]"
-                    :dataPoint="header.userConfig"
-                    :header="header"
-                    hideLabel
-                    @editItem="editItem"
-                    @deleteItem="deleteItem"
-                    protectImage
-                />
-                <!--<DatapointForDisplayInner-->
-                <!--    :isTag="true"-->
-                <!--    :header="header"-->
-                <!--    :item="props.row[header.isChildOf.value]"-->
-                <!--    :superOptions="superOptions"-->
-                <!--    hideLabel-->
-                <!--/>-->
-              </div>
-            </template>
-            <template v-else>
-              <div>
-                <DatapointForDisplay
-                    :item="props.row"
-                    :superOptions="superOptions"
-                    :childRelations="[]"
-                    :dataPoint="header.userConfig"
-                    :header="header"
-                    hideLabel
-                    @editItem="editItem"
-                    @deleteItem="deleteItem"
-                    protectImage
-                />
-                <!--<DatapointForDisplayInner-->
-                <!--    :header="header"-->
-                <!--    :item="props.row"-->
-                <!--    :superOptions="superOptions"-->
-                <!--    hideLabel-->
-                <!--/>-->
-              </div>
-            </template>
-          </q-td>
-        </q-tr>
-      </template>
-    </q-table>
-    <template v-if="!items.length">
-      <template v-if="loading">
-        <div class="text-center q-pa-md">Loading...</div>
-      </template>
-      <template v-else-if="loadingError">
-        <div class="text-center q-pa-md text-grey-5">Loading Error</div>
-      </template>
-      <template v-else>
-        <div class="text-center q-pa-md text-grey-5">None</div>
-      </template>
+            <div v-if="header.isChildOf">
+              <DatapointForDisplay
+                  :item="row[header.isChildOf.value]"
+                  :superOptions="superOptions"
+                  :childRelations="[]"
+                  :dataPoint="header.userConfig"
+                  :header="header"
+                  hideLabel
+                  @editItem="editItem"
+                  @deleteItem="deleteItem"
+                  protectImage
+              />
+            </div>
+            <div v-else>
+              <DatapointForDisplay
+                  :item="row"
+                  :superOptions="superOptions"
+                  :childRelations="[]"
+                  :dataPoint="header.userConfig"
+                  :header="header"
+                  hideLabel
+                  @editItem="editItem"
+                  @deleteItem="deleteItem"
+                  protectImage
+              />
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+
+    <template v-else>
+      <div v-if="loading" class="text-center py-4">Loading...</div>
+      <div v-else-if="loadingError" class="text-center py-4 text-red-500">Loading Error</div>
+      <div v-else class="text-center py-4 text-gray-500">None</div>
     </template>
   </div>
 </template>

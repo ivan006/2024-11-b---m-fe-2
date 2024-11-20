@@ -80,9 +80,8 @@ const linksList = computed(() => {
   if (session.value) {
     const myAccount = `/lists/users/${session.value.user.id}/${session.value.user.name}`;
     links.push(
-        { icon: 'person', title: 'My Account', route: myAccount },
+        {  title: 'My Account', route: myAccount },
         {
-          icon: 'logout',
           title: 'Logout',
           function: () => {
             VueCookies.remove('VITE_AUTH');
@@ -92,12 +91,12 @@ const linksList = computed(() => {
     );
   } else {
     links.push(
-        { icon: 'person', title: 'Login', route: '/login' },
-        { icon: 'edit', title: 'Register', route: '/register' }
+        { title: 'Login', route: '/login' },
+        {  title: 'Register', route: '/register' }
     );
   }
 
-  links.push({ icon: 'info', title: 'About', route: '/about' });
+  links.push({  title: 'About', route: '/about' });
 
   return links;
 });

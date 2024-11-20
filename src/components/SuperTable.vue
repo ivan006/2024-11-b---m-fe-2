@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div v-if="!justCreateButton">
-      <div v-if="isForSelectingRelation">
+    <template v-if="!justCreateButton">
+      <template v-if="isForSelectingRelation">
+        <!--<SuperTableList-->
+        <!--    :items="items"-->
+        <!--    :modelValue="modelValue"-->
+        <!--    @update:modelValue="clickRow"-->
+        <!--    :superOptions="superOptions"-->
+        <!--/>-->
         <SuperSelect
             ref="selectRef"
             :forcedFilters="forcedFilters"
@@ -26,7 +32,11 @@
             :hideBottomSpace="selectHideBottomSpace"
         >
           <CreateButton
-              v-if="superOptions.model.rules.creatable() && canCreateComputed && !hideCreate"
+              v-if="
+              superOptions.model.rules.creatable() &&
+              canCreateComputed &&
+              !hideCreate
+            "
               :modelFields="modelFields"
               @createItem="createItem"
               :model="model"
@@ -35,8 +45,14 @@
               :createButtonText="createButtonText"
           />
         </SuperSelect>
-      </div>
-      <div v-else>
+
+        <!--:key="filterInput.name"-->
+        <!--:model="filterInput.meta.field.parent"-->
+        <!--:modelField="filterInput"-->
+        <!--v-model="filters[filterInput.name]"-->
+      </template>
+      <template v-else>
+        <!--<pre>{{filters }}</pre>-->
         <SuperTableTopBar
             v-model="filters"
             v-model:activeTab="activeTab"
@@ -57,11 +73,12 @@
             :templateForm="templateForm"
             @createItem="createItem"
         />
-        <div>
+        <div class="">
           <template v-if="activeTab == 'table'">
             <div>
+              <!--:id="`pdfBody${toHtmlIdSafeString(downloadables.pdf?.title)}`"-->
               <template v-if="!noBorder">
-                <div class="p-4">
+                <q-card class="">
                   <SuperTableTable
                       ref="SuperTableTableRef"
                       :items="items"
@@ -77,7 +94,7 @@
                       @deleteItem="deleteItem"
                       :loadingError="loadingError"
                   />
-                </div>
+                </q-card>
               </template>
               <template v-else>
                 <SuperTableTable
@@ -96,10 +113,15 @@
                 />
               </template>
             </div>
-            <div class="flex justify-center">
-              <pagination
-                  class="mt-4"
-                  :class="noBorder ? 'mx-auto' : ''"
+            <!--:superOptions="superOptions"-->
+            <!--:itemsLength="itemsLength"-->
+            <!--@clickRow="clickRow"-->
+            <!--:pagination="options"-->
+            <!--@update:pagination="updatePagination"-->
+            <div class="flex flex-center">
+              <q-pagination
+                  class="q-mt-sm"
+                  :class="noBorder ? 'q-mx-md' : ''"
                   v-if="!hidePagination && items.length"
                   v-model="options.page"
                   @update:modelValue="pageUpdate"
@@ -107,13 +129,101 @@
                   input
               />
             </div>
+            <!--@update:rows-per-page="updateRowsPerPage"-->
+          </template>
+          <template v-if="activeTab == 'grid'">
+            <div class="">
+              <SuperTableGrid
+                  :items="items"
+                  @clickRow="clickRow"
+                  :superOptions="superOptions"
+                  :unClickable="unClickable"
+                  :templateListGrid="templateListGrid"
+                  @editItem="editItem"
+                  @deleteItem="deleteItem"
+                  :excludedCols="excludedCols"
+                  :loading="loading"
+              />
+            </div>
+          </template>
+          <template v-if="activeTab == 'map'">
+            <SuperTableMap
+                :mapHeaders="mapHeaders"
+                :items="items"
+                @clickRow="clickRow"
+                :superOptions="superOptions"
+                @editItem="editItem"
+                @deleteItem="deleteItem"
+                :unClickable="unClickable"
+                :templateListGrid="templateListGrid"
+            />
+          </template>
+          <template v-if="activeTab == 'calendar'">
+            <template v-if="!noBorder">
+              <q-card class="q-pa-sm">
+                <!--<SuperTableCalendarWrapper-->
+                <!--    :startFieldName="startFieldName"-->
+                <!--    :endFieldName="endFieldName"-->
+                <!--    :items="items"-->
+                <!--    @clickRow="clickRow"-->
+                <!--    :superOptions="superOptions"-->
+                <!--    @editItem="editItem"-->
+                <!--    @deleteItem="deleteItem"-->
+                <!--    :templateListGrid="templateListGrid"-->
+                <!--    :templateListCalendar="templateListCalendar"-->
+                <!--    :unClickable="unClickable"-->
+                <!--    :loading="loading"-->
+                <!--/>-->
+                <!--&lt;!&ndash;:calendarMode="calendarMode"&ndash;&gt;-->
+
+                <SuperCalendar
+                    @clickRow="clickRow"
+                    @editItem="editItem"
+                    @deleteItem="deleteItem"
+                    :loading="loading"
+                    :mixedConfigs="[
+                    {
+                      templateListCalendar: templateListCalendar,
+                      startFieldName: startFieldName,
+                      endFieldName: endFieldName,
+                      items: items,
+                      superOptions: superOptions,
+                      unClickable: unClickable,
+                    },
+                  ]"
+                />
+                <!--:calendarMode="calendarMode"-->
+              </q-card>
+            </template>
+            <template v-else>
+              <SuperCalendar
+                  @clickRow="clickRow"
+                  @editItem="editItem"
+                  @deleteItem="deleteItem"
+                  :loading="loading"
+                  :mixedConfigs="[
+                  {
+                    templateListCalendar: templateListCalendar,
+                    startFieldName: startFieldName,
+                    endFieldName: endFieldName,
+                    items: items,
+                    superOptions: superOptions,
+                    unClickable: unClickable,
+                  },
+                ]"
+              />
+            </template>
           </template>
         </div>
-      </div>
-    </div>
-    <div v-else>
+      </template>
+    </template>
+    <template v-else>
       <CreateButton
-          v-if="superOptions.model.rules.creatable() && canCreateComputed && !hideCreate"
+          v-if="
+          superOptions.model.rules.creatable() &&
+          canCreateComputed &&
+          !hideCreate
+        "
           :modelFields="modelFields"
           @createItem="createItem"
           :model="model"
@@ -121,7 +231,7 @@
           :template="templateForm"
           :createButtonText="createButtonText"
       />
-    </div>
+    </template>
     <CrudModal
         :templateForm="templateForm"
         @fetchData="fetchData"
@@ -136,17 +246,27 @@
 <script>
 // import CreateEditForm from "./CreateEditForm.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
+import SuperTableGrid from "./SuperTableGrid.vue";
+import SuperTableTable from "./SuperTableTable.vue";
+import SuperTableMap from "./SuperTableMap.vue";
+import SuperTableList from "./SuperTableList.vue";
 import SuperSelect from "./SuperSelect.vue";
+import FilterTime from "./FilterTime.vue";
+import FilterPlace from "./FilterPlace.vue";
+import DestructableExpansionPanels from "./DestructableExpansionPanels.vue";
 import CreateButton from "./CreateButton.vue";
 import RelationComponent from "./RelationComponent.vue";
 
-import { defineAsyncComponent } from "vue";
+import {defineAsyncComponent} from "vue";
 import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
-
-import Helpers from "./Helpers";
+import SearchGooglePlace from "./SearchGooglePlace.vue";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import PdfTemplate from "./PdfTemplate.vue";
+import {Helpers} from "../index";
+import SuperCalendar from "./SuperCalendar.vue";
 import CrudModal from "./CrudModal.vue";
 import SuperTableTopBar from "./SuperTableTopBar.vue";
-import SuperTableTable from "@/components/SuperTableTable.vue";
 // import html2pdf from 'html2pdf.js';
 
 const AsyncComponentCreateEditForm = defineAsyncComponent(
@@ -161,13 +281,20 @@ export default {
   components: {
     SuperTableTopBar,
     CrudModal,
+    SuperCalendar,
+    PdfTemplate,
+    SearchGooglePlace,
     RecordFieldsForDisplayGeneric,
     RelationComponent,
     CreateButton,
-
+    DestructableExpansionPanels,
+    FilterPlace,
+    FilterTime,
     SuperSelect,
+    SuperTableList,
+    SuperTableMap,
     SuperTableTable,
-
+    SuperTableGrid,
     CreateEditForm: AsyncComponentCreateEditForm,
     SuperTable: AsyncComponentSuperTable,
   },
@@ -750,4 +877,8 @@ export default {
 };
 </script>
 
-
+<style lang="scss">
+//.highlighted {
+//  background-color: #f0f0f0;
+//}
+</style>
