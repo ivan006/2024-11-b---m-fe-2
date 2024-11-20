@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import userList from 'src/views/lists/users/UserList.vue'
+import userList from '@/views/lists/users/UserList.vue'
 
 export default {
     name: 'User-list-controller',

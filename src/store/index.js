@@ -3,10 +3,10 @@ import VuexORM from '@vuex-orm/core'
 
 // import { DBCrudCacheSet } from 'wizweb-fe';
 
-import User from 'src/models/User'
-import Session from 'src/models/Session'
-import RouteLineage  from "src/models/RouteLineage";
-import EmailMessage from "src/models/orm-api/EmailMessage";
+import User from '@/models/User'
+import Session from '@/models/Session'
+import RouteLineage  from "@/models/RouteLineage";
+import EmailMessage from "@/models/orm-api/EmailMessage";
 
 // Initialize the database
 const database = new VuexORM.Database()

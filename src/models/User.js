@@ -1,6 +1,6 @@
-import MyBaseModel from 'src/models/helpers/MyBaseModel';
+import MyBaseModel from '@/models/helpers/MyBaseModel';
 import VueCookies from 'vue-cookies';
-import EmailMessage from "src/models/orm-api/EmailMessage";
+import EmailMessage from "@/models/orm-api/EmailMessage";
 
 export default class User extends MyBaseModel {
   static entity = 'user';

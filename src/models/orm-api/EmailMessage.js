@@ -1,5 +1,5 @@
-import MyBaseModel from 'src/models/helpers/MyBaseModel';
-import User from 'src/models/User';
+import MyBaseModel from '@/models/helpers/MyBaseModel';
+import User from '@/models/User';
 
 export default class EmailMessage extends MyBaseModel {
     static entity = 'emailmessage';

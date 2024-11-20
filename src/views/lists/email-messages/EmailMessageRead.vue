@@ -10,7 +10,7 @@
 
 <script>
 // import { SuperRecord } from 'wizweb-fe'
-import EmailMessage from 'src/models/orm-api/EmailMessage'
+import EmailMessage from '@/models/orm-api/EmailMessage'
 
 export default {
     name: 'EmailMessage-read',

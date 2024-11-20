@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import emailMessageRead from 'src/views/lists/email-messages/EmailMessageRead.vue'
+import emailMessageRead from '@/views/lists/email-messages/EmailMessageRead.vue'
 
 export default {
     name: 'EmailMessage-read-controller',

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import emailMessageList from 'src/views/lists/email-messages/EmailMessageList.vue'
+import emailMessageList from '@/views/lists/email-messages/EmailMessageList.vue'
 
 export default {
     name: 'EmailMessage-list-controller',

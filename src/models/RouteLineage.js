@@ -1,4 +1,4 @@
-// src/models/RouteLineage.js
+// @/models/RouteLineage.js
 import { Model } from '@vuex-orm/core';
 
 export default class RouteLineage extends Model {

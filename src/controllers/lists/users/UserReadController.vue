@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import userRead from 'src/views/lists/users/UserRead.vue'
-import User from "src/models/User";
+import userRead from '@/views/lists/users/UserRead.vue'
+import User from "@/models/User";
 import VueCookies from "vue-cookies";
-import SectionComponent from "src/views/SectionComponent.vue";
+import SectionComponent from "@/views/SectionComponent.vue";
 
 export default {
     name: 'User-read-controller',

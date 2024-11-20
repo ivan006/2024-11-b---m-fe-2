@@ -17,7 +17,7 @@
 
 <script>
 // import { SuperTable } from 'wizweb-fe'
-import User from 'src/models/User'
+import User from '@/models/User'
 
 export default {
     name: 'User-list',

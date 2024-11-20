@@ -1,5 +1,5 @@
-// src/store/modules/routeLineages.js
-import RouteLineage from 'src/models/RouteLineage';
+// @/store/modules/routeLineages.js
+import RouteLineage from '@/models/RouteLineage';
 
 function standardizePath(path) {
   return typeof path === 'string' ? path.replace(/^\//, '') : '';

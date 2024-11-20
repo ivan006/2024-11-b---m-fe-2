@@ -59,7 +59,7 @@
 
 <script>
 import VueCookies from "vue-cookies";
-import Session from "src/models/Session";
+import Session from "@/models/Session";
 
 export default {
   name: "SigninView",

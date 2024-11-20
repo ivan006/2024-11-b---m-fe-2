@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import User from "src/models/User";
+import User from "@/models/User";
 import VueCookies from "vue-cookies";
 
 export default {
