@@ -1,7 +1,8 @@
 // import { DBBaseModel } from 'wizweb-fe'
+import { Model } from '@vuex-orm/core'
 import VueCookies from "vue-cookies";
 
-export default class DBEvent extends DBBaseModel {
+export default class DBEvent extends Model {
     static baseUrl = import.meta.env.VITE_API_BACKEND_URL
 
     static adapator = 'laravel'
