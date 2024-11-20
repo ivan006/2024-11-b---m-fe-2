@@ -105,46 +105,90 @@
   </div>
 </template>
 
+
 <script>
 import SuperTable from "./SuperTable.vue";
+import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
+import QuickListsHelpers from "./QuickListsHelpers";
+import RecordFieldsForDisplayCustom from "./RecordFieldsForDisplayCustom.vue";
+// import SuperTableTable from "./SuperTableTable.vue";
 import OverviewTab from "./OverviewTab.vue";
-import CreateEditForm from "./CreateEditForm.vue";
+import {defineAsyncComponent} from "vue";
+import Helpers from "./Helpers";
+const AsyncCreateEditFormComponent = defineAsyncComponent(() =>
+    import('./CreateEditForm.vue')
+);
 
 export default {
   name: "SuperRecord",
   components: {
+    CreateEditForm: AsyncCreateEditFormComponent,
     OverviewTab,
+    RecordFieldsForDisplayCustom,
+    RecordFieldsForDisplayGeneric,
     SuperTable,
-    CreateEditForm,
   },
   props: {
-    allowedTabs: Array,
-    templateOverview: Object,
-    templateForm: Object,
-    model: [Object, Function],
-    id: Number,
-    displayMapField: Boolean,
-    relationships: Array,
+    allowedTabs: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    templateOverview: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    templateForm: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    model: {
+      type: [Object, Function],
+      required: true,
+    },
+    id: {
+      type: Number,
+      required: true,
+    },
+    displayMapField: {
+      type: Boolean,
+      default: false,
+    },
+    relationships: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {
-      deleteItemData: {showModal: false, data: null},
-      editItemData: {showModal: false, data: null},
-      activeTab: "tab-overview",
+      deleteItemData: {
+        showModal: false,
+        data: null,
+      },
+      editItemData: {
+        showModal: false,
+        data: null,
+      },
+      activeTab: 'tab-overview',
       loading: true,
+      initialLoadHappened: false,
       item: {},
       formServerErrors: {},
     };
   },
   computed: {
-    filteredChildRelations() {
-      return this.childRelations.filter(relation => this.allowedTabs.includes(relation.field.name));
-    },
-    canEdit() {
-      return true; // Update based on your logic
-    },
-    childRelations() {
-      return this.modelFields; // Adjust logic based on actual data
+
+    someChildrenCanBeMapped() {
+      return this.childRelations.some(
+          child =>  child.canBeMapped
+      )
     },
     superOptions() {
       return {
@@ -152,35 +196,231 @@ export default {
         modelFields: this.modelFields,
         displayMapField: this.displayMapField,
         model: this.model,
-        canEdit: this.canEdit
+        canEdit: this.canEdit,
       };
     },
+    fieldsUsedInOverview() {
+      // let result = {
+      //   dataIndicators: [],
+      //   cols: [],
+      // };
+      const result = []
+      if (this.templateOverview && this.templateOverview.cols) {
+        for (const col of this.templateOverview.cols) {
+          if (col.cols) {
+            for (const col2 of col.cols) {
+              if (col2.dataPoint.field) {
+                result.push(col2.dataPoint.field);
+              }
+            }
+          } else {
+            if (col.dataPoint.field) {
+              result.push(col.dataPoint.field);
+            }
+          }
+        }
+      }
+
+      return result;
+    },
+    canEdit() {
+      return true;
+    },
+    childRelations() {
+      const fields = QuickListsHelpers.computedAttrs(this.model, []);
+      const result = [];
+
+      for (let fieldName in fields) {
+        const field = fields[fieldName];
+        if (field.usageType.startsWith("relChildren")) {
+          const child = {
+            field,
+
+            // currentParentRecord: {
+            //   item: this.item,
+            //   model: this.model,
+            //   relationType: field.usageType,
+            //   foreignKeyToParentRecord: field.meta.field.foreignKey,
+            // },
+          }
+
+          const headers = QuickListsHelpers.SupaerTableHeaders(
+              field.meta.field.related,
+              [this.parentKeyValuePair({field}).parentFKey],
+          )
+
+          const startfield = Helpers.getFieldFromModelOrParent(headers, 'timeRangeStart');
+
+          if (startfield){
+            child.canBeCalendared = true
+          } else {
+            child.canBeCalendared = false
+          }
+
+          let longField = Helpers.getFieldFromModelOrParent(headers, 'mapExtraGeoLocLong');
+
+          if (longField){
+            child.canBeMapped = true
+          } else {
+            child.canBeMapped = false
+          }
+
+          child.superOptions = {
+            headers,
+            modelFields: QuickListsHelpers.computedAttrs(
+                field.meta.field.related,
+                [this.parentKeyValuePair({field}).parentFKey],
+            ),
+            displayMapField: false,
+            model: field.meta.field.related,
+            canEdit: field.meta.field.related.rules.creatable()
+          }
+          // console.log('field')
+          // console.log(child.superOptions)
+
+          result.push(child);
+        }
+      }
+
+      return result;
+    },
+    filteredChildRelations() {
+      let result = [];
+      if (!this.allowedTabs){
+      }
+      for (const childRelation of this.childRelations) {
+        if (
+            !this.fieldsUsedInOverview.includes(childRelation.field.name)
+            && (this.allowedTabs.length === 0 || this.allowedTabs.includes(childRelation.field.name))
+        ) {
+          result.push(childRelation);
+        }
+      }
+      return result;
+    },
+    headers() {
+      return QuickListsHelpers.SupaerTableHeaders(this.model, [], this.canEdit, this.displayMapField);
+    },
+    // item() {
+    //   return this.model.query().whereId(this.id).withAll().get()[0];
+    // },
     modelFields() {
-      return this.model.fields || []; // Adjust based on actual data
+      return QuickListsHelpers.computedAttrs(this.model, []);
     },
   },
   methods: {
     clickRow(pVal, item, relation) {
-      console.log(pVal, item, relation);
+      relation.field.meta.field.related.openRecord(pVal, item, this.$router)
     },
-    editItemSubmit() {
-      // Edit item logic
+    parentKeyValuePair(relation) {
+      const fKey = relation.field.meta.field.foreignKey
+
+      const result = {
+        parentFKey: fKey,
+        parentFVal: this.item[this.model.primaryKey],
+        parentItem: this.item,
+      }
+      return result
+    },
+    deleteItem(item) {
+
+      this.$emit("deleteItem", item);
+
+      this.deleteItemData.data = item;
+      this.deleteItemData.showModal = true;
     },
     deleteItemSubmit() {
-      // Delete item logic
+      this.superOptions.model.Delete(this.deleteItemData.data.id).then(() => {
+        this.fetchData();
+      });
+      this.deleteItemData.showModal = false;
+    },
+    editItem(item) {
+      this.$emit("editItem", item);
+
+      this.editItemData.data = {...item};
+      this.editItemData.showModal = true;
+    },
+    editItemSubmit() {
+      const payload = QuickListsHelpers.preparePayload(
+          this.editItemData.data,
+          this.superOptions.modelFields
+      );
+
+      this.superOptions.model.Update(payload)
+          .then(() => {
+            this.fetchData();
+            this.editItemData.showModal = false;
+            this.formServerErrors = {};
+          })
+          .catch((err) => {
+            this.formServerErrors = err.response.data;
+          });
+    },
+    getMsg(type) {
+      if (Array.isArray(type)) {
+        return type.length > 1
+            ? `To create first set your active ${type[0]} group and active ${type[1]} group`
+            : "";
+      } else {
+        return `To create first set your active ${type} group`;
+      }
+    },
+    filters(relation) {
+      const parentKeyValuePair = this.parentKeyValuePair(relation)
+
+      return {
+        [parentKeyValuePair.parentFKey]: parentKeyValuePair.parentFVal,
+      };
+    },
+    fetchData() {
+      this.loading = true
+      this.model
+          .FetchById(
+              this.id,
+              this.relationships,
+              { flags: {}, moreHeaders: {}, rels: [] }
+          )
+          .then((response) => {
+
+            this.item = response.response.data.data
+            this.loading = false
+            this.initialLoadHappened = true;
+            this.$emit("initialLoadHappened", true);
+          })
+          .catch(() => {
+            this.loading = false
+            this.initialLoadHappened = true;
+            this.$emit("initialLoadHappened", true);
+          });
     },
   },
   mounted() {
+    if(this.allowedTabs.length){
+      this.activeTab = `tab-${this.allowedTabs[0]}`
+    }
     this.fetchData();
   },
-  methods: {
-    fetchData() {
-      // Fetch data logic
-    }
-  },
+  watch: {
+    activeTab(newVal) {
+      this.$nextTick(() => {
+        if (this.$refs[newVal]) {
+          this.$refs[newVal][0].fetchData();
+        }
+      });
+    },
+    item(newVal) {
+      if (Object.keys(newVal).length !== 0){
+        this.$emit('update:item', newVal)
+      }
+    },
+  }
 };
 </script>
 
-<style scoped>
-/* Add your Preline-based styles here */
+<style>
+.SuperRecorSingleTabOnly .q-tab-panel {
+    padding: 0;
+
+}
 </style>

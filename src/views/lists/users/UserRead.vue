@@ -1,4 +1,6 @@
 <template>
+  <div>
+
     <SuperRecord
         :model="superRecordModel"
         :id="+$route.params.rId"
@@ -6,6 +8,7 @@
         @initialLoadHappened="$emit('initialLoadHappened')"
     >
     </SuperRecord>
+  </div>
 </template>
 
 <script>
