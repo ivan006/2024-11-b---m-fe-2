@@ -1,29 +1,29 @@
-import { route } from 'quasar/wrappers';
-import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router';
-import routes from './routes';
+import { createRouter, createWebHistory, createWebHashHistory, createMemoryHistory } from 'vue-router';
+import routes from './routes'; // Ensure your `routes` array is defined
 import VueCookies from 'vue-cookies';
 
-export default route(function (/* { store, ssrContext } */) {
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
+// Choose the appropriate history mode
+const createHistory = process.env.VUE_ROUTER_MODE === 'history'
+    ? createWebHistory
+    : createWebHashHistory;
 
-  const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
-    history: createHistory(process.env.VUE_ROUTER_BASE),
-  });
-
-  Router.beforeEach((to, from, next) => {
-    const sessionitem = VueCookies.get('VITE_AUTH');
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false);
-
-    if (requiresAuth && !sessionitem?.user) {
-      next({ path: '/login' });
-    } else {
-      next();
-    }
-  });
-
-  return Router;
+// Initialize the router
+const router = createRouter({
+  history: createHistory(process.env.VUE_ROUTER_BASE || '/'), // Default base path
+  scrollBehavior: () => ({ left: 0, top: 0 }), // Reset scroll on route change
+  routes, // Route definitions
 });
+
+// Add global navigation guards
+router.beforeEach((to, from, next) => {
+  const sessionItem = VueCookies.get('VITE_AUTH');
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false);
+
+  if (requiresAuth && !sessionItem?.user) {
+    next({ path: '/login' }); // Redirect to login if not authenticated
+  } else {
+    next(); // Proceed to the next route
+  }
+});
+
+export default router;
