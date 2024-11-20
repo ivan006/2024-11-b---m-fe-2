@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { Attribute } from "@vuex-orm/core";
+import {Attribute} from "@vuex-orm/core";
 
 export default {
   name: "RelationComponent",

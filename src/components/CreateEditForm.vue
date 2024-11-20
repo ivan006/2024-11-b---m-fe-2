@@ -53,7 +53,7 @@
           }}
         </div>
         <div class="text-right">
-          <q-btn flat label="Cancel" @click="cancel" />
+          <q-btn flat label="Cancel" @click="cancel"/>
           <q-btn
               flat
               label="Save"
@@ -80,13 +80,13 @@ import RelationComponent from "./RelationComponent.vue";
 import DateAndTimeRangePicker from "./DateAndTimeRangePicker.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
 import SuperSelect from "./SuperSelect.vue";
-import { defineAsyncComponent } from "vue";
+import {defineAsyncComponent} from "vue";
 import RecordFieldsForEditGeneric from "./RecordFieldsForEditGeneric.vue";
 import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
 import RecordFieldsForDisplayCustom from "./RecordFieldsForDisplayCustom.vue";
 import RecordFieldsForEditCustom from "./RecordFieldsForEditCustom.vue";
 import CreateButton from "./CreateButton.vue";
-import { FieldUsageTypes } from "./FieldUsageTypes";
+import {FieldUsageTypes} from "./FieldUsageTypes";
 
 const AsyncSuperTableComponent = defineAsyncComponent(
     () => import("./SuperTable.vue"),

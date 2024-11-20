@@ -25,7 +25,7 @@
         <q-item v-if="scope.index === 0" class="q-mt-none q-px-md">
           <q-item-section>
             <div class="q-mb-md">
-              <slot />
+              <slot/>
             </div>
             <q-input
                 v-model="search"
@@ -72,9 +72,9 @@
 
 function debounce(func, wait, immediate) {
   let timeout;
-  return function() {
+  return function () {
     const context = this, args = arguments;
-    const later = function() {
+    const later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -200,7 +200,7 @@ export default {
   },
   computed: {
     compLabel() {
-      if (this.hideLabel){
+      if (this.hideLabel) {
         return void 0
       } else {
         return this.modelField.label
@@ -235,26 +235,26 @@ export default {
     itemsComp() {
       let result = [];
       if (!this.disabled) {
-        result.push({ label: "", id: null });  // None item for search input
+        result.push({label: "", id: null});  // None item for search input
         if (this.allowAll) {
-          result.push({ label: "All", id: null });
+          result.push({label: "All", id: null});
         }
 
-        if (!this.activated){
+        if (!this.activated) {
           result = result.filter(option => option.id !== this.modelValue);
           let preSelectedItemLabel = ""
-          if (this.preSelectedItem){
+          if (this.preSelectedItem) {
             preSelectedItemLabel = this.preSelectedItem[this.model.titleKey]
           }
-          if (this.modelValue){
-            result.push({ label: preSelectedItemLabel, id: this.modelValue });
+          if (this.modelValue) {
+            result.push({label: preSelectedItemLabel, id: this.modelValue});
           }
         }
 
         for (const item of this.items) {
-          result.push({ label: item[this.model.titleKey], id: item[this.model.primaryKey] });
+          result.push({label: item[this.model.titleKey], id: item[this.model.primaryKey]});
         }
-        result.push({ label: "", id: null });  // None item for search input
+        result.push({label: "", id: null});  // None item for search input
         // result = [...result, ...this.items.map(item => ({
         //   label: item[this.model.titleKey],
         //   id: item[this.model.primaryKey]
@@ -283,7 +283,7 @@ export default {
       this.$emit('update:modelValue', value, item);
     },
     fetchDefaultItem() {
-      if (this.modelValue && !this.items.length){
+      if (this.modelValue && !this.items.length) {
 
         this.loadingInner = true
         this.model
@@ -312,7 +312,7 @@ export default {
         }, 300)
       }
     },
-    modelValue(newVal){
+    modelValue(newVal) {
       this.fetchDefaultItem();
     }
   },

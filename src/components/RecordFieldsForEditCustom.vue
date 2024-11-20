@@ -1,11 +1,11 @@
 <template>
-  <div :class="colClasses(template.width ? template.width : 12)" >
+  <div :class="colClasses(template.width ? template.width : 12)">
 
     <div style="padding-top:0.03px;">
       <div
           class="row "
-         :class="`${template.unsetGutters ? '' : 'q-col-gutter-xs'} ${template.class?.length ? template.class : ''} `"
-         :style="`${template.style?.length ? template.style : ''}`"
+          :class="`${template.unsetGutters ? '' : 'q-col-gutter-xs'} ${template.class?.length ? template.class : ''} `"
+          :style="`${template.style?.length ? template.style : ''}`"
       >
 
         <template v-if="template.cols?.length">
@@ -40,7 +40,7 @@
           <!--  </template>-->
           <!--</template>-->
 
-          <template  v-for="(col, index2) in template.cols" :key="index2">
+          <template v-for="(col, index2) in template.cols" :key="index2">
             <RecordFieldsForEditCustom
                 :modelValue="modelValue"
                 @update:modelValue="updateModelValue"
@@ -131,11 +131,11 @@ export default {
       loading: false,
     };
   },
-  computed:{
+  computed: {
 
     compField() {
       if (this.template.dataPoint?.type === 'function') {
-        return { label: this.template.dataPoint.label };
+        return {label: this.template.dataPoint.label};
       } else {
         const result = this.superOptions.modelFields.find((header) => {
           return header.field == this.template.dataPoint.field

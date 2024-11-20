@@ -11,7 +11,7 @@
         filled
     >
       <template v-slot:append>
-        <q-icon name="event" />
+        <q-icon name="event"/>
       </template>
     </q-input>
 
@@ -102,7 +102,7 @@
 
         <!-- OK Button -->
         <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" @click="finalizeDateTimeRange" />
+          <q-btn flat label="OK" color="primary" @click="finalizeDateTimeRange"/>
         </q-card-actions>
       </q-card>
     </q-dialog>

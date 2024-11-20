@@ -31,18 +31,18 @@
 import SuperTable from '@/components/SuperTable.vue';
 
 export default {
-  components: { SuperTable },
+  components: {SuperTable},
   data() {
     return {
       search: '',
       columns: [
-        { label: 'ID', key: 'id' },
-        { label: 'Name', key: 'name' },
-        { label: 'Email', key: 'email' },
+        {label: 'ID', key: 'id'},
+        {label: 'Name', key: 'name'},
+        {label: 'Email', key: 'email'},
       ],
       items: [
-        { id: 1, name: 'John Doe', email: 'john@example.com' },
-        { id: 2, name: 'Jane Doe', email: 'jane@example.com' },
+        {id: 1, name: 'John Doe', email: 'john@example.com'},
+        {id: 2, name: 'Jane Doe', email: 'jane@example.com'},
       ],
     };
   },

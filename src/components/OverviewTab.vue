@@ -44,7 +44,7 @@ import DatapointForDisplayInner from "./DatapointForDisplayInner.vue";
 
 export default {
   name: 'OverviewTab',
-  components: {DatapointForDisplayInner, RecordFieldsForDisplayCustom, RecordFieldsForDisplayGeneric },
+  components: {DatapointForDisplayInner, RecordFieldsForDisplayCustom, RecordFieldsForDisplayGeneric},
   props: {
     templateOverview: {
       type: Object,

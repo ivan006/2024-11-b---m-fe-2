@@ -5,7 +5,7 @@
         <div class="row" style="align-items: center;">
           <template v-if="!dataPoint.hideLabel">
             <div class="q-pr-sm">
-              <div  class="text-bold" style="display: flex; align-items: center;">
+              <div class="text-bold" style="display: flex; align-items: center;">
                 {{ label }}:
               </div>
             </div>
@@ -33,7 +33,7 @@
               <!--  </div>-->
               <!--</template>-->
               <template v-if="dataPoint.type === 'component'">
-                <component :is="asyncComponent" :item="item" />
+                <component :is="asyncComponent" :item="item"/>
               </template>
               <template v-else-if="dataPoint.type === 'function'">
                 <!--{{ dataPoint.function(item) }}-->
@@ -58,7 +58,7 @@
     <template v-else>
 
       <template v-if="!dataPoint.hideLabel && !hideLabel">
-        <div  class="text-bold" :style="`visibility: ${label.length ? 'visible' : 'hidden'}`">
+        <div class="text-bold" :style="`visibility: ${label.length ? 'visible' : 'hidden'}`">
           {{ label }}:
         </div>
       </template>
@@ -115,7 +115,7 @@
 
 <script>
 import DatapointForDisplayInner from './DatapointForDisplayInner.vue'
-import { defineAsyncComponent } from 'vue';
+import {defineAsyncComponent} from 'vue';
 import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
 
 export default {
@@ -196,10 +196,10 @@ export default {
       return null;
     },
     compField() {
-      if (this.header){
+      if (this.header) {
         return this.header;
       } else if (this.dataPoint.type === 'component' || this.dataPoint.type === 'function') {
-        return { label: this.dataPoint.label };
+        return {label: this.dataPoint.label};
       } else {
         // const result = this.superOptions.headers.find((header) => {
         const result = this.superOptions.headers.find((header) => {
@@ -220,7 +220,7 @@ export default {
     label() {
       if (typeof this.dataPoint.label !== "undefined") {
         return this.dataPoint.label;
-      } else if(this.dataPoint.type === 'component' || this.dataPoint.type === 'function'){
+      } else if (this.dataPoint.type === 'component' || this.dataPoint.type === 'function') {
         return "";
       } else {
         return this.compField ? this.compField.label : '';

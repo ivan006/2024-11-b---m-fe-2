@@ -178,7 +178,7 @@
                     style="max-width: 100%; max-height: 200px"
                 />
               </template>
-              <template v-else> Images can only be set on create. </template>
+              <template v-else> Images can only be set on create.</template>
             </q-card-section>
           </q-card>
         </div>
@@ -198,7 +198,7 @@
         >
           <!--@change="handleFileUpload"-->
           <template v-slot:prepend>
-            <q-icon name="attach_file" />
+            <q-icon name="attach_file"/>
           </template>
         </q-file>
       </template>
@@ -258,7 +258,7 @@
       />
     </template>
     <template v-else-if="field.usageType === 'location_address_place_name'">
-    <!---->
+      <!---->
     </template>
     <template v-else-if="field.usageType.startsWith('mapExtra')">
       <q-input
@@ -351,7 +351,7 @@ import DateAndTimePicker from "./DateAndTimePicker.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
 import SuperSelect from "./SuperSelect.vue";
 // import SuperTable from "./SuperTable.vue";
-import { defineAsyncComponent } from "vue";
+import {defineAsyncComponent} from "vue";
 
 const AsyncSuperTableComponent = defineAsyncComponent(
     () => import("./SuperTable.vue"),

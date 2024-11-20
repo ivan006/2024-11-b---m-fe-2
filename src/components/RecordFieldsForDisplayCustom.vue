@@ -32,7 +32,8 @@
             </RecordFieldsForDisplayCustom>
           </template>
         </template>
-        <template v-else-if="template.dataPoint && (template.dataPoint.field !== 'actions' || superOptions.model.rules.editable(item))">
+        <template
+            v-else-if="template.dataPoint && (template.dataPoint.field !== 'actions' || superOptions.model.rules.editable(item))">
           <div class="col-12" style="overflow: hidden;">
             <DatapointForDisplay
                 :item="item"
@@ -58,7 +59,7 @@ import DatapointForDisplay from './DatapointForDisplay.vue';
 
 export default {
   name: 'RecordFieldsForDisplayCustom',
-  components: { DatapointForDisplay },
+  components: {DatapointForDisplay},
   props: {
     template: {
       type: Object,

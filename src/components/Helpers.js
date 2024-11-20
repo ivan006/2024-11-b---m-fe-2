@@ -112,9 +112,6 @@ class Helpers {
     }
 
 
-
-
-
     static prepareRelationsForSupabase(arr) {
         let select = ['*']
         for (const value of arr) {
@@ -128,6 +125,7 @@ class Helpers {
             select: result,
         }
     }
+
     static prepareRelationsForLaravel(arr) {
         let includes = [];
         for (const value of arr) {
@@ -141,7 +139,6 @@ class Helpers {
             include: result,
         };
     }
-
 
 
     static capitalizeFirstLetter(string) {

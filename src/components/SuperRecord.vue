@@ -27,7 +27,8 @@
 
       <!-- Tab panels using Preline -->
       <div class="tab-panels mt-4">
-        <div v-if="activeTab === 'tab-overview'" v-show="this.allowedTabs.length === 0 || this.allowedTabs.includes('overview')">
+        <div v-if="activeTab === 'tab-overview'"
+             v-show="this.allowedTabs.length === 0 || this.allowedTabs.includes('overview')">
           <template v-if="!loading">
             <OverviewTab
                 :item="item"
@@ -49,8 +50,8 @@
         </div>
 
 
-
-        <div v-if="activeTab === 'tab-map'" v-show="someChildrenCanBeMapped && (this.allowedTabs.length === 0 || this.allowedTabs.includes('map'))">
+        <div v-if="activeTab === 'tab-map'"
+             v-show="someChildrenCanBeMapped && (this.allowedTabs.length === 0 || this.allowedTabs.includes('map'))">
           <!-- Map content here -->
         </div>
 
@@ -65,7 +66,7 @@
               @clickRow="(pVal, item) => {clickRow(pVal, item, relation)}"
           >
             <template v-if="$slots[relation.field.name]" v-slot:create>
-              <slot :name="relation.field.name" />
+              <slot :name="relation.field.name"/>
             </template>
           </SuperTable>
         </div>
@@ -127,8 +128,8 @@ export default {
   },
   data() {
     return {
-      deleteItemData: { showModal: false, data: null },
-      editItemData: { showModal: false, data: null },
+      deleteItemData: {showModal: false, data: null},
+      editItemData: {showModal: false, data: null},
       activeTab: "tab-overview",
       loading: true,
       item: {},
@@ -146,7 +147,13 @@ export default {
       return this.modelFields; // Adjust logic based on actual data
     },
     superOptions() {
-      return { headers: this.headers, modelFields: this.modelFields, displayMapField: this.displayMapField, model: this.model, canEdit: this.canEdit };
+      return {
+        headers: this.headers,
+        modelFields: this.modelFields,
+        displayMapField: this.displayMapField,
+        model: this.model,
+        canEdit: this.canEdit
+      };
     },
     modelFields() {
       return this.model.fields || []; // Adjust based on actual data

@@ -74,7 +74,7 @@ import DatapointForDisplayInner from './DatapointForDisplayInner.vue';
 
 export default {
   name: 'RecordFieldsForDisplayGeneric',
-  components: { DatapointForDisplayInner },
+  components: {DatapointForDisplayInner},
   props: {
     unClickable: {
       type: Boolean,

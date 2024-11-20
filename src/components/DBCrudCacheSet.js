@@ -1,4 +1,4 @@
-import { Model } from '@vuex-orm/core'
+import {Model} from '@vuex-orm/core'
 import {
     Attribute,
     BelongsTo,
@@ -15,7 +15,6 @@ import {
     HasOne,
 } from '@vuex-orm/core'
 import Helpers from './Helpers'
-
 
 
 export default class DBCrudCacheSet extends Model {
@@ -48,10 +47,10 @@ export default class DBCrudCacheSet extends Model {
                 model.fieldsMetadata &&
                 model.fieldsMetadata[fieldName]
             ) {
-                if (model.fieldsMetadata[fieldName].usageType){
+                if (model.fieldsMetadata[fieldName].usageType) {
                     usageType = model.fieldsMetadata[fieldName].usageType
                 }
-                if (model.fieldsMetadata[fieldName].important){
+                if (model.fieldsMetadata[fieldName].important) {
                     important = model.fieldsMetadata[fieldName].important
                 }
                 fieldExtras = model.fieldsMetadata[fieldName]
@@ -235,7 +234,7 @@ export default class DBCrudCacheSet extends Model {
             result[foreignKeyKey] = foreignKeyValue
         }
         const payload = {
-            data: { id: model.entity, fields: result },
+            data: {id: model.entity, fields: result},
         }
         this.insert(payload)
     }

@@ -192,7 +192,7 @@ class QuickListsHelpers {
         for (const field of fields) {
 
             if (field.usageType.startsWith('relLookupNormal')) {
-                if (!excludedCols.includes(field.meta.foreignKey)){
+                if (!excludedCols.includes(field.meta.foreignKey)) {
                     result.push({
                         ...field,
                         meta: {
@@ -213,7 +213,7 @@ class QuickListsHelpers {
                     })
                 }
             } else {
-                if(!excludedCols.includes(field.name)) {
+                if (!excludedCols.includes(field.name)) {
                     result.push({
                         ...field,
                         meta: {
@@ -261,21 +261,21 @@ class QuickListsHelpers {
                 let headerParentFields = [];
                 for (const relatedAttr of relatedAttrs) {
                     // if (relatedAttr.important === true) {
-                        if (relatedAttr.usageType.startsWith('relForeignKey')) {
-                            // do nothing
-                        } else {
-                            headerParentFields.push({
-                                usageType: relatedAttr.usageType,
-                                dataType: relatedAttr.dataType,
-                                meta: relatedAttr.meta,
-                                name: `${computedAttr.name}.${relatedAttr.name}`,
-                                align: 'left',
-                                label: relatedAttr.label,
-                                field: row => row[computedAttr.name] && row[computedAttr.name][relatedAttr.name],
-                                format: val => `${val}`,
-                                sortable: true,
-                            });
-                        }
+                    if (relatedAttr.usageType.startsWith('relForeignKey')) {
+                        // do nothing
+                    } else {
+                        headerParentFields.push({
+                            usageType: relatedAttr.usageType,
+                            dataType: relatedAttr.dataType,
+                            meta: relatedAttr.meta,
+                            name: `${computedAttr.name}.${relatedAttr.name}`,
+                            align: 'left',
+                            label: relatedAttr.label,
+                            field: row => row[computedAttr.name] && row[computedAttr.name][relatedAttr.name],
+                            format: val => `${val}`,
+                            sortable: true,
+                        });
+                    }
                     // }
                 }
 
