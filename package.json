@@ -12,6 +12,7 @@
     "@vuex-orm/plugin-axios": "^0.9.4",
     "axios": "^1.7.7",
     "core-js": "^3.8.3",
+    "dayjs": "^1.11.13",
     "preline": "^2.5.1",
     "vue": "^3.2.13",
     "vue-cookies": "^1.8.4",
