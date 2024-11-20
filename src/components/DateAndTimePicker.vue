@@ -82,7 +82,7 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import {QIcon, QInput} from "quasar";
+// import {QIcon, QInput} from "quasar";
 
 // Extend Day.js with plugins
 dayjs.extend(utc);
