@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router';
 import VuexORM from '@vuex-orm/core';
 import VuexORMAxios from '@vuex-orm/plugin-axios';
 import axios from 'axios';
-import { generateRouteLineages } from 'src/store/modules/routeLineages';
+import { generateRouteLineages } from '@/store/modules/routeLineages';
 
 defineOptions({
   name: 'App'
