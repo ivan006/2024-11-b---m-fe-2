@@ -12,7 +12,8 @@
     "@vuex-orm/plugin-axios": "^0.9.4",
     "core-js": "^3.8.3",
     "preline": "^2.5.1",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
