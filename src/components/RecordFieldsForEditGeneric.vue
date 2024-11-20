@@ -11,11 +11,12 @@
         && !field.usageType.startsWith('mapExtraPlace')
     ">
         <div
-          class="q-mb-sm"
-         v-show="!(typeof field.fieldExtras.autoFill === 'function')"
+            class="q-mb-sm"
+            v-show="!(typeof field.fieldExtras.autoFill === 'function')"
         >
 
-          <div v-if="rendered && !field.usageType.startsWith('relLookupMapExtraRel')" class="text-subtitle2" :style="`visibility: ${field.label.length ? 'visible' : 'hidden'}`">
+          <div v-if="rendered && !field.usageType.startsWith('relLookupMapExtraRel')" class="text-subtitle2"
+               :style="`visibility: ${field.label.length ? 'visible' : 'hidden'}`">
             {{ field.label }}:
           </div>
           <!--:disabled="typeof field.fieldExtras.autoFill === 'function'"-->
@@ -93,11 +94,11 @@ export default {
     // }
   },
   methods: {
-    updateModelValue(fieldValue, fieldName){
+    updateModelValue(fieldValue, fieldName) {
       this.itemData[fieldName] = fieldValue
       this.$emit('update:modelValue', this.itemData)
     },
-    autoFillAll(){
+    autoFillAll() {
       for (const field of this.superOptions.modelFields) {
         // if (typeof field.fieldExtras.autoFill === 'function' && !this.itemData[field.name]) {
         if (typeof field.fieldExtras.autoFill === 'function') {
