@@ -6,7 +6,7 @@
         outline
     >
       <!--:disable="!canCreatePart2"-->
-      {{ createButtonText ? createButtonText : 'New'}}
+      {{ createButtonText ? createButtonText : 'New' }}
       <q-tooltip v-if="canCreateMsg.length" bottom :disable="canCreatePart2">
         <span>{{ canCreateMsg }}</span>
       </q-tooltip>
