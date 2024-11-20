@@ -18,5 +18,6 @@ module.exports = {
     rules: {
         'vue/no-multiple-template-root': 'off', // Allow multiple root nodes in Vue 3
         'no-unused-vars': 'warn',
+        'vue/no-unused-components': 'off', // Disable "unused components" errors
     },
 };
