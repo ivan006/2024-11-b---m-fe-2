@@ -1,60 +1,71 @@
 <template>
+  <div class="flex justify-center items-center min-h-screen p-4">
+    <div class="max-w-md w-full">
+      <!-- Card-like container using Tailwind classes -->
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <form @submit.prevent="submit">
+          <div class="text-2xl font-semibold mb-4">Login</div>
 
-  <q-page class="q-pa-md ">
+          <!-- Show form if no session -->
+          <template v-if="!session">
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                  v-model="form.email"
+                  id="email"
+                  type="email"
+                  name="email"
+                  class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="you@example.com"
+                  :rules="[emailRule]"
+                  autocomplete="email"
+                  required
+              />
+            </div>
 
-    <div class="row  q-col-gutter-md">
-      <div class="col-xl-3 col-md-3 col-sm-12 col-xs-12">
-      </div>
-      <div class="col-xl-6 col-md-6 col-sm-12 col-xs-12">
-        <q-card class="q-pa-md">
-          <q-form @submit.prevent="submit">
-            <div class="text-h6 q-mb-md">Login</div>
-            <template v-if="!session">
-              <q-input
-                v-model="form.email"
-                label="Email"
-                type="email"
-                outlined
-                dense
-                :rules="[emailRule]"
-                autocomplete="email"
-                name="email"
+            <div class="mb-4">
+              <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+              <input
+                  v-model="form.password"
+                  id="password"
+                  type="password"
+                  name="password"
+                  class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  autocomplete="password"
+                  required
               />
-              <q-input
-                v-model="form.password"
-                label="Password"
-                type="password"
-                outlined
-                dense
-                autocomplete="password"
-                name="password"
-              />
-              <q-btn
+            </div>
+
+            <!-- Submit button -->
+            <button
                 type="submit"
-                block
-                class="q-mt-md full-width"
-                :loading="loading"
-                label="Login"
-                color="primary"
-              />
-              <div class="q-mt-md text-center">
-                <q-btn
-                  label="Register"
-                  class="full-width"
-                  outline
-                  color="primary"
-                  @click="$router.push({ path: 'register'})"
-                />
-              </div>
-            </template>
-            <template v-else>
-              Welcome <b>{{ loginSession.user.email }}</b>
-            </template>
-          </q-form>
-        </q-card>
+                :disabled="loading"
+                class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              <span v-if="loading">Loading...</span>
+              <span v-else>Login</span>
+            </button>
+
+            <!-- Register button -->
+            <div class="mt-4 text-center">
+              <button
+                  type="button"
+                  @click="$router.push({ path: 'register' })"
+                  class="w-full py-2 px-4 border border-gray-300 rounded-md text-blue-600 hover:text-blue-800"
+              >
+                Register
+              </button>
+            </div>
+          </template>
+
+          <!-- If session exists, show welcome message -->
+          <template v-else>
+            <p>Welcome <b>{{ loginSession.user.email }}</b></p>
+          </template>
+        </form>
       </div>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script>
@@ -70,7 +81,7 @@ export default {
         password: "",
       },
       loading: false,
-      emailRule: (val) => !!val || 'Email is required'
+      emailRule: (val) => !!val || 'Email is required',
     };
   },
   computed: {
@@ -79,32 +90,29 @@ export default {
     },
     session() {
       const session = VueCookies.get('VITE_AUTH');
-      return session
+      return session;
     },
   },
   methods: {
     submit() {
-      // Session.deleteAll();
       this.loading = true;
       Session.signIn(this.form)
-        .then((response) => {
-          const sessionData = response.response.data;
-          const expireDate = new Date();
-          expireDate.setDate(expireDate.getDate() + 7); // Set the expiration date to 7 days from now
+          .then((response) => {
+            const sessionData = response.response.data;
+            const expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 7); // Set the expiration date to 7 days from now
 
-          sessionData.expireDate = expireDate.toISOString(); // Add the expiration date to the session data
+            sessionData.expireDate = expireDate.toISOString(); // Add the expiration date to the session data
 
-          VueCookies.set('VITE_AUTH', sessionData, '7d');
-          // this.$router.push({ path: '/'})
-          this.loading = false;
-          window.location.href = '/'; // Redirect to home page after logout
-        })
-        .catch(() => {
-          this.loading = false;
-        });
+            VueCookies.set('VITE_AUTH', sessionData, '7d');
+            this.loading = false;
+            window.location.href = '/'; // Redirect to home page after login
+          })
+          .catch(() => {
+            this.loading = false;
+          });
     },
   },
-  mounted() {},
 };
 </script>
 
