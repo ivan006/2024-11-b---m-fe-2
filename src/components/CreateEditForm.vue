@@ -1,35 +1,29 @@
 <template>
   <div>
-    <div>
-      <!-- Title Section -->
-      <div class="p-4 bg-white shadow rounded-md">
-        <div class="text-xl font-semibold">
-          {{ titlePrefix }}
-          {{
-            superOptions.model?.entityHumanName
-                ? superOptions.model?.entityHumanName
-                : "Item"
-          }}
-        </div>
+    <div class="bg-white rounded-lg shadow-lg p-4">
+      <div class="text-xl font-semibold">
+        {{ titlePrefix }}
+        {{
+          superOptions.model?.entityHumanName
+              ? superOptions.model?.entityHumanName
+              : "Item"
+        }}
       </div>
 
-      <!-- Form Section -->
-      <div class="p-4">
+      <div class="mt-4">
         <form ref="editForm">
           <template v-if="template && template.cols">
-            <div class="pt-0.5">
-              <div class="grid grid-cols-1 gap-4">
-                <RecordFieldsForEditCustom
-                    :modelValue="itemData"
-                    @update:modelValue="updateModelValue"
-                    :superOptions="superOptions"
-                    @updateSetDefaultEndTime="updateSetDefaultEndTime"
-                    :template="template"
-                    :formServerErrors="formServerErrors"
-                    :itemErrors="itemErrors"
-                    @placeSelected="placeSelected"
-                />
-              </div>
+            <div class="grid grid-cols-1 gap-4">
+              <RecordFieldsForEditCustom
+                  :modelValue="itemData"
+                  @update:modelValue="updateModelValue"
+                  :superOptions="superOptions"
+                  @updateSetDefaultEndTime="updateSetDefaultEndTime"
+                  :template="template"
+                  :formServerErrors="formServerErrors"
+                  :itemErrors="itemErrors"
+                  @placeSelected="placeSelected"
+              />
             </div>
           </template>
           <template v-else>
@@ -46,70 +40,31 @@
         </form>
       </div>
 
-      <!-- Error Message Section -->
-      <div class="p-4 text-right text-red-600">
-        {{
-          Object.keys(itemErrors).length
-              ? `${Object.keys(itemErrors)[0]} is required${
-                  Object.keys(itemErrors).length > 1
-                      ? " (and " + (Object.keys(itemErrors).length - 1) + " more error/s)."
-                      : "."
-              }`
-              : ""
-        }}
-      </div>
-
-      <!-- Actions Section -->
-      <div class="p-4 flex justify-end space-x-4">
-        <button
-            class="px-4 py-2 text-sm bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-            @click="cancel"
-        >
-          Cancel
-        </button>
-        <button
-            class="px-4 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            @click="editItemSubmit"
-            :disabled="loading || submitting"
-        >
-          Save
-        </button>
-      </div>
-    </div>
-
-    <!-- Edit Item Dialog -->
-    <div v-if="canEdit && superOptions.canEdit" class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="bg-white p-6 rounded-md shadow-lg w-96 max-w-full">
-        <CreateEditForm
-            titlePrefix="Edit"
-            v-if="editItemData.showModal"
-            v-model="editItemData.data"
-            @submit="editItemSubmit"
-            @cancel="editItemData.showModal = false; "
-            :superOptions="superOptions"
-            :template="templateForm"
-            :formServerErrors="formServerErrors"
-        />
-      </div>
-    </div>
-
-    <!-- Delete Item Dialog -->
-    <div v-if="deleteItemData.showModal" class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="bg-white p-6 rounded-md shadow-lg w-96 max-w-full">
-        <div class="text-lg font-semibold">Delete Item</div>
-        <p class="mt-2">Are you sure you want to delete this item?</p>
-        <div class="mt-4 flex justify-end space-x-4">
+      <div class="mt-4">
+        <div class="text-right text-red-500">
+          {{
+            Object.keys(itemErrors).length
+                ? `${Object.keys(itemErrors)[0]} is required${Object.keys(
+                    itemErrors
+                ).length > 1
+                    ? " (and " + (Object.keys(itemErrors).length - 1) + " more error/s)."
+                    : "."} `
+                : ""
+          }}
+        </div>
+        <div class="text-right mt-2">
           <button
-              class="px-4 py-2 text-sm bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-              @click="deleteItemData.showModal = false"
+              class="px-4 py-2 text-gray-700 border border-gray-300 rounded-md"
+              @click="cancel"
           >
             Cancel
           </button>
           <button
-              class="px-4 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700"
-              @click="deleteItemSubmit"
+              class="ml-2 px-4 py-2 text-white bg-blue-500 rounded-md"
+              @click="editItemSubmit"
+              :disabled="loading || submitting"
           >
-            Delete
+            Save
           </button>
         </div>
       </div>
@@ -130,22 +85,22 @@ import RelationComponent from "./RelationComponent.vue";
 import DateAndTimeRangePicker from "./DateAndTimeRangePicker.vue";
 import QuickListsHelpers from "./QuickListsHelpers";
 import SuperSelect from "./SuperSelect.vue";
-import {defineAsyncComponent} from "vue";
+import { defineAsyncComponent } from "vue";
 import RecordFieldsForEditGeneric from "./RecordFieldsForEditGeneric.vue";
 import RecordFieldsForDisplayGeneric from "./RecordFieldsForDisplayGeneric.vue";
 import RecordFieldsForDisplayCustom from "./RecordFieldsForDisplayCustom.vue";
 import RecordFieldsForEditCustom from "./RecordFieldsForEditCustom.vue";
-// import CreateButton from "./CreateButton.vue";
-import {FieldUsageTypes} from "./FieldUsageTypes";
+import CreateButton from "./CreateButton.vue";
+import FieldUsageTypes from "./FieldUsageTypes";
 
-const AsyncSuperTableComponent = defineAsyncComponent(() =>
-    import("./SuperTable.vue")
+const AsyncSuperTableComponent = defineAsyncComponent(
+    () => import("./SuperTable.vue"),
 );
 
 export default {
   name: "CreateEditForm",
   components: {
-    // CreateButton,
+    CreateButton,
     RecordFieldsForEditCustom,
     RecordFieldsForDisplayCustom,
     RecordFieldsForDisplayGeneric,
@@ -205,13 +160,13 @@ export default {
     placeFieldsWithFieldNames() {
       let result = [];
       const location_address_place_name = this.superOptions.modelFields.find(
-          (field) => field.usageType == "location_address_place_name"
+          (field) => field.usageType == "location_address_place_name",
       );
 
       if (location_address_place_name) {
         for (const placeFieldType of QuickListsHelpers.mapPlaceFields()) {
           const placeField = this.superOptions.modelFields.find(
-              (field) => field.usageType == placeFieldType.flag
+              (field) => field.usageType == placeFieldType.flag,
           );
           if (placeField) {
             result.push({
@@ -233,19 +188,19 @@ export default {
       // Mapping of flags to Vuex ORM Models.
       const flagToModel = {
         relForeignKeyMapExtraRelCountry: this.superOptions.modelFields.find(
-            (field) => field.usageType == "relForeignKeyMapExtraRelCountry"
+            (field) => field.usageType == "relForeignKeyMapExtraRelCountry",
         ).meta.relatedModel,
         relForeignKeyMapExtraRelAdminArea1: this.superOptions.modelFields.find(
-            (field) => field.usageType == "relForeignKeyMapExtraRelAdminArea1"
+            (field) => field.usageType == "relForeignKeyMapExtraRelAdminArea1",
         ).meta.relatedModel,
         relForeignKeyMapExtraRelAdminArea2: this.superOptions.modelFields.find(
-            (field) => field.usageType == "relForeignKeyMapExtraRelAdminArea2"
+            (field) => field.usageType == "relForeignKeyMapExtraRelAdminArea2",
         ).meta.relatedModel,
         relForeignKeyMapExtraRelLocality: this.superOptions.modelFields.find(
-            (field) => field.usageType == "relForeignKeyMapExtraRelLocality"
+            (field) => field.usageType == "relForeignKeyMapExtraRelLocality",
         ).meta.relatedModel,
         relForeignKeyMapExtraRelSublocality: this.superOptions.modelFields.find(
-            (field) => field.usageType == "relForeignKeyMapExtraRelSublocality"
+            (field) => field.usageType == "relForeignKeyMapExtraRelSublocality",
         ).meta.relatedModel,
         // test: this.model,
       };
@@ -259,13 +214,13 @@ export default {
             // Find the first available sublocality level
             for (const name of placeField.googleName) {
               component = googlePlace.address_components.find((item) =>
-                  item.types.includes(name)
+                  item.types.includes(name),
               );
               if (component) break;
             }
           } else {
             component = googlePlace.address_components.find((item) =>
-                item.types.includes(placeField.googleName)
+                item.types.includes(placeField.googleName),
             );
           }
 
@@ -315,18 +270,19 @@ export default {
             }
 
             const parentKey = Object.keys(
-                flagToModel[placeField.flag].fieldsMetadata
+                flagToModel[placeField.flag].fieldsMetadata,
             ).find(
                 (key) =>
                     flagToModel[placeField.flag].fieldsMetadata[key].usageType ===
-                    currentType
+                    currentType,
             );
 
             data[parentKey] = parent_id;
 
             // Perform the Upsert operation.
-            // const responce = await flagToModel[placeField.flag]
-            //     .Store(data)
+            // const responce = await flagToModel[
+            //     placeField.flag
+            //     ].Store(data)
 
             const responce = await flagToModel[placeField.flag].Store(
                 {
@@ -338,7 +294,7 @@ export default {
                   upsertCompareOn: "name",
                   upsertCompareMode: "sluggify",
                 },
-                {}
+                {},
             );
             // Extract the id from the result for use as parent_id in the next iteration.
             // console.log('responce')
@@ -370,7 +326,7 @@ export default {
     },
     updateSetDefaultEndTime(arg) {
       const timeRangeEndField = this.superOptions.modelFields.find(
-          (field) => field.usageType === "timeRangeEnd"
+          (field) => field.usageType === "timeRangeEnd",
       );
 
       this.itemData[timeRangeEndField.name] = dayjs(arg)
@@ -416,3 +372,6 @@ export default {
   },
 };
 </script>
+<style scoped>
+/* Scoped styles for modals, buttons, etc., can go here */
+</style>

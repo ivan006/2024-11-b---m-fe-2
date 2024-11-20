@@ -1,348 +1,146 @@
 <template>
   <div>
-    <!--<pre>{{formServerErrors}}</pre>-->
-    <!--<pre>{{compServerError}}</pre>-->
     <template v-if="field.dataType === 'uid'"></template>
+
     <template v-else-if="field.usageType.startsWith('rel')">
       <template v-if="field.usageType.startsWith('relLookup')"></template>
+
       <template v-else-if="field.usageType.startsWith('relForeignKeyNormal')">
-        <!--<SuperSelect-->
-        <!--    :modelField="field"-->
-        <!--    :modelValue="modelValue"-->
-        <!--    :model="field.meta.field.parent"-->
-        <!--    variant="filled"-->
-        <!--    density="default"-->
-        <!--    :user="superOptions.user"-->
-        <!--    :rules="[() => true]"-->
-        <!--/>-->
-
-        <!--<RelationComponent-->
-        <!--    :configs="field"-->
-        <!--    :modelValue="modelValue"-->
-        <!--    readonly-->
-        <!--    :rules="[() => true]"-->
-        <!--/>-->
-
-        <SuperTable
-            :disabled="disabled"
-            :hideLabel="hideLabel"
-            :isForSelectingRelation="true"
-            :canEdit="false"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
-            :model="field.meta.field.parent"
-            :rules="[() => true]"
-            :modelField="field"
-            :fetchFlags="{
-            sort: field.meta.field.parent.titleKey,
-          }"
-            :forcedFilters="getForcedFilters(field)"
-            @superTableMounted="$emit('superTableMounted')"
-            :errorMessage="compError"
-        />
-        <!--parentKeyValuePair-->
-      </template>
-      <template
-          v-else-if="field.usageType.startsWith('relForeignKeyMapExtraRel')"
-      >
-        <SuperTable
-            :hideLabel="hideLabel"
-            :isForSelectingRelation="true"
-            :canEdit="false"
-            :modelValue="modelValue"
-            @update:modelValue="
-            (newValue) => {
-              updateModelValue(newValue);
-              updateForeignKey(newValue);
-            }
-          "
-            :model="field.meta.field.parent"
-            :rules="[() => true]"
-            :modelField="field"
-            :fetchFlags="{
-            sort: field.meta.field.parent.titleKey,
-          }"
-            :forcedFilters="getForcedFilters(field)"
-            @superTableMounted="$emit('superTableMounted')"
-            :errorMessage="compError"
-            disabled
+        <!-- Replace complex select components with a simple textarea -->
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
+            :placeholder="field.label"
         />
       </template>
-      <template
-          v-else-if="field.usageType == 'relForeignKeyOwnerAppliedToProviderType'"
-      >
-        <SuperSelect
-            :hideLabel="hideLabel"
-            :modelField="field"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
-            :model="field.meta.field.parent"
+
+      <template v-else-if="field.usageType.startsWith('relForeignKeyMapExtraRel')">
+        <!-- Replace SuperTable with a simple textarea -->
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
+            :placeholder="field.label"
+        />
+      </template>
+
+      <template v-else-if="field.usageType == 'relForeignKeyOwnerAppliedToProviderType'">
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
+            :placeholder="field.label"
             readonly
-            variant="filled"
-            density="default"
         />
-        <!--:user="superOptions.user"-->
       </template>
+
       <template v-else-if="field.usageType !== 'relChildrenNormal'">
-        <RelationComponent
-            :hideLabel="hideLabel"
-            :configs="field"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
+            :placeholder="field.label"
         />
       </template>
     </template>
+
+    <!-- Handle time range inputs with a textarea for simplicity -->
     <template v-else-if="field.usageType == 'timeRangeType'">
-      <DateAndTimeRangePicker
-          :label="compLabel"
+      <textarea
+          v-model="modelValueComputed"
+          class="w-full p-2 border rounded-md"
           :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
       />
     </template>
-    <template v-else-if="field.usageType == 'timeRangeStart'">
-      <DateAndTimePicker
-          :label="compLabel"
-          :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateStartTime"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-      />
-    </template>
-    <template v-else-if="field.usageType == 'timeRangeEnd'">
-      <DateAndTimePicker
-          :label="compLabel"
-          :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-      />
-    </template>
+
     <template v-else-if="field.usageType == 'timestampType'">
-      <!--<DateAndTimePicker-->
-      <!--    :label="compLabel"-->
-      <!--      :placeholder="compPlaceholder"-->
-      <!--    :modelValue="modelValue"-->
-      <!--    @update:modelValue="updateModelValue"-->
-      <!--    :rules="field.meta.rules"-->
-      <!--    :error="!!compError"-->
-      <!--    :error-message="compError"-->
-      <!--/>-->
-      <q-input
-          :label="compLabel"
-          :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
+      <textarea
+          v-model="modelValueComputed"
+          class="w-full p-2 border rounded-md"
           type="datetime-local"
-          filled
-          dense
-      />
-    </template>
-    <template v-else-if="field.usageType == 'dateType'">
-      <q-input
-          :label="compLabel"
           :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-          type="date"
-          filled
-          dense
       />
     </template>
+
+    <template v-else-if="field.usageType == 'dateType'">
+      <textarea
+          v-model="modelValueComputed"
+          class="w-full p-2 border rounded-md"
+          type="date"
+          :placeholder="compPlaceholder"
+      />
+    </template>
+
     <template v-else-if="field.usageType.startsWith('fileImageType')">
-      <!--<template  v-if="typeof modelValue === 'string' && modelValue.length">-->
       <template v-if="itemPVal">
         <div class="q-mb-md">
-          <q-card style="width: unset; max-width: unset" flat class="bg-grey-2">
-            <q-card-section class="q-pa-sm" style="text-align: center">
-              <template
-                  v-if="typeof modelValue === 'string' && modelValue.length"
-              >
-                <!--:src="`${superOptions.model?.fileUrlPrefix}/${modelValue}`"-->
-                <img
-                    :src="`${modelValue}`"
-                    alt="File not found."
-                    style="max-width: 100%; max-height: 200px"
-                />
-              </template>
-              <template v-else> Images can only be set on create.</template>
-            </q-card-section>
-          </q-card>
+          <div class="bg-grey-200 p-4 text-center">
+            <template v-if="typeof modelValue === 'string' && modelValue.length">
+              <img
+                  :src="modelValue"
+                  alt="File not found."
+                  class="max-w-full max-h-48"
+              />
+            </template>
+            <template v-else> Images can only be set on create. </template>
+          </div>
         </div>
       </template>
 
       <template v-else>
-        <q-file
-            :modelValue="modelValue"
-            @update:modelValue="handleFileUpload"
-            :label="compLabel"
+        <input
+            type="file"
+            @change="handleFileUpload"
             accept=".pdf,.jpg,.jpeg,.png"
-            :error="!!compError"
-            :error-message="compError"
-            class="q-mb-md"
-            filled
-            dense
-        >
-          <!--@change="handleFileUpload"-->
-          <template v-slot:prepend>
-            <q-icon name="attach_file"/>
-          </template>
-        </q-file>
+            class="w-full p-2 border rounded-md"
+        />
       </template>
     </template>
-    <template v-else-if="field.usageType.startsWith('htmlField')">
-      <q-editor
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :toolbar="[
-          ['bold', 'italic', 'underline', 'strike'],
-          ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-          ['link', 'image', 'hr'],
-          ['undo', 'redo'],
-        ]"
-          :label="compLabel"
-          :error="!!compError"
-          :error-message="compError"
-          dense
-          :placeholder="compPlaceholder"
-          :rules="field.meta.rules"
-          filled
-      />
-    </template>
-    <template
-        v-else-if="
-        field.usageType.startsWith('staticLookup') &&
-        field.fieldExtras.usageTypeExtras?.options
-      "
-    >
-      <q-select
-          :label="compLabel"
-          :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          option-label="label"
-          option-value="value"
-          emitValue
-          mapOptions
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-          :options="field.fieldExtras.usageTypeExtras.options"
-          filled
-          dense
-      />
-    </template>
-    <template v-else-if="field.usageType == 'readOnlyTimestampType'">
-      <DateAndTimePicker
-          :label="compLabel"
-          :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-          disabled
-      />
-    </template>
-    <template v-else-if="field.usageType === 'location_address_place_name'">
-      <!---->
-    </template>
-    <template v-else-if="field.usageType.startsWith('mapExtra')">
-      <q-input
-          :label="compLabel"
-          :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-          filled
-          dense
-      />
-      <!--readonly-->
-      <!--style="display: none"-->
-    </template>
-    <template v-else-if="field.usageType == 'normal'">
+
+    <!-- For text fields, use a simple textarea -->
+    <template v-else-if="field.usageType === 'normal'">
       <template v-if="field.dataType === 'string'">
-        <q-input
-            :label="compLabel"
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
             :placeholder="compPlaceholder"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
-            :rules="field.meta.rules"
-            :error="!!compError"
-            :error-message="compError"
-            filled
-            dense
         />
       </template>
+
       <template v-else-if="field.dataType === 'boolean'">
-        <q-checkbox
-            :label="compLabel"
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
             :placeholder="compPlaceholder"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
-            :rules="field.meta.rules"
-            :error="!!compError"
-            :error-message="compError"
         />
       </template>
+
       <template v-else-if="field.dataType === 'number'">
-        <q-input
-            :label="compLabel"
-            :placeholder="compPlaceholder"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
-            :rules="field.meta.rules"
-            :error="!!compError"
-            :error-message="compError"
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
             type="number"
-            filled
-            dense
+            :placeholder="compPlaceholder"
         />
       </template>
+
       <template v-else-if="field.dataType === 'attr'">
-        <q-input
-            :label="compLabel"
+        <textarea
+            v-model="modelValueComputed"
+            class="w-full p-2 border rounded-md"
             :placeholder="compPlaceholder"
-            :modelValue="modelValue"
-            @update:modelValue="updateModelValue"
-            :rules="field.meta.rules"
-            :error="!!compError"
-            :error-message="compError"
-            filled
-            dense
         />
       </template>
     </template>
+
+    <!-- Default to textarea for unknown types -->
     <template v-else>
-      <q-input
-          :label="compLabel"
+      <textarea
+          v-model="modelValueComputed"
+          class="w-full p-2 border rounded-md"
           :placeholder="compPlaceholder"
-          :modelValue="modelValue"
-          @update:modelValue="updateModelValue"
-          :rules="field.meta.rules"
-          :error="!!compError"
-          :error-message="compError"
-          filled
-          dense
       />
     </template>
   </div>
 </template>
+
 
 <script>
 import RelationComponent from "./RelationComponent.vue";
@@ -423,6 +221,16 @@ export default {
     };
   },
   computed: {
+    modelValueComputed: {
+      get() {
+        // Return the value of the modelValue prop
+        return this.modelValue;
+      },
+      set(value) {
+        // Emit the updated value to the parent component
+        this.$emit("update:modelValue", value);
+      }
+    },
     itemPVal() {
       const result = this.item[this.superOptions.model.primaryKey];
       return result;
