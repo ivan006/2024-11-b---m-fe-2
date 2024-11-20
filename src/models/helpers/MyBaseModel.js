@@ -3,7 +3,7 @@ import { Model } from '@vuex-orm/core'
 import VueCookies from "vue-cookies";
 
 export default class DBEvent extends Model {
-    static baseUrl = import.meta.env.VITE_API_BACKEND_URL
+    static baseUrl = import.meta.env.VUE_APP_API_BACKEND_URL
 
     static adapator = 'laravel'
 
