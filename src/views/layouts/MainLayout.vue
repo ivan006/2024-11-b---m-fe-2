@@ -48,10 +48,10 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import EssentialLink from '@/views/EssentialLink.vue';
 import MainLayoutHelper from '@/views/layouts/MainLayoutHelper.vue';
 import BreadcrumbsComp from '@/views/BreadcrumbsComp.vue';
 import VueCookies from 'vue-cookies';
+import EssentialLink from "@/views/layouts/EssentialLink.vue";
 
 defineOptions({
   name: 'MainLayout',

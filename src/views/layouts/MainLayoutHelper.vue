@@ -1,6 +1,8 @@
 <template>
   <div>
     <!-- Responsive Header -->
+
+
     <template v-if="isSmallScreen">
       <header class="bg-primary text-white py-2 shadow-md">
         <div class="flex items-center justify-between px-4">
